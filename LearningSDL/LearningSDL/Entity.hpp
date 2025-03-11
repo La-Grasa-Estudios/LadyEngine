@@ -11,11 +11,6 @@ const Entity MAX_ENTITIES = 100000;
 
 class EntityManager
 {
-private:
-	std::queue<Entity> mAvailableEntities;
-	std::array<Signature, MAX_ENTITIES> mSignatures;
-	uint64_t mLivingEntitiesCount;
-
 public:
 	EntityManager();
 	~EntityManager();
@@ -26,7 +21,10 @@ public:
 	void SetSignature(Entity entity, Signature signature);
 	Signature GetSignature(Entity entity);
 
-
+private:
+	std::queue<Entity> mAvailableEntities;
+	std::array<Signature, MAX_ENTITIES> mSignatures;
+	uint64_t mLivingEntitiesCount;
 };
 
 #endif //!ENTITY_HPP

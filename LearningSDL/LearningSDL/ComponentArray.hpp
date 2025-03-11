@@ -14,16 +14,11 @@ public:
 template <typename T>
 class ComponentArray : public IComponetArray
 {
-private:
-	std::array<T, MAX_ENTITIES> mComponentArray;
-	std::unordered_map<Entity, size_t> mEntitytoIndexMap;
-	std::unordered_map<size_t, Entity> mIndextoEntityMap;
-	size_t mSize;
-
 public:
+
 	void InsertData(Entity entity, T component)
 	{
-		if (!(mEntitytoIndexMap.find(entity) == mEntitytoIndexMap.end()))
+		if (mEntitytoIndexMap.find(entity) != mEntitytoIndexMap.end())
 		{
 			std::cout << "\nTrying to add a duplicate component for the same entity.Ensure each entity has only one of this component type\n";
 			return;
@@ -35,8 +30,46 @@ public:
 		++mSize;
 	}
 
-	
+	void RemoveData(Entity entity)
+	{
 
+		if(mEntitytoIndexMap.find(entity) == mEntitytoIndexMap.end())
+		{
+			::cout << "\nAttempting to delete an entity that does not exist.\n";
+			return;
+		}
+		rsize_t IndexOfRemovedEntity = mEntitytoIndexMap[entity];
+		rsize_t IndexOfLastElement = mSize - 1; 
+		mComponentArray[IndexOfRemovedEntity] = mComponentArray[IndexOfLastElement];
+
+
+		Entity LastEntity = mIndextoEntityMap[IndexOfLastElement];
+		mEntitytoIndexMap[LastEntity] = IndexOfRemovedEntity;
+		mIndextoEntityMap[IndexOfRemovedEntity] = LastEntity;
+
+		mEntitytoIndexMap.erase(entity);
+		mIndextoEntityMap.erase(IndexOfLastElement);
+		--mSize;
+	}
+
+	T& GetData(Entity entity)
+	{
+		return mComponentArray[mEntitytoIndexMap[entity]];
+	}
+
+	void DestroyEntity(Entity entity) override
+	{
+		if (mEntitytoIndexMap.find(entity) != mEntitytoIndexMap.end()) 
+		{
+			RemoveData(entity);
+		}
+	}
+
+private:
+	std::array<T, MAX_ENTITIES> mComponentArray;
+	std::unordered_map<Entity, size_t> mEntitytoIndexMap;
+	std::unordered_map<size_t, Entity> mIndextoEntityMap;
+	size_t mSize;
 };
 
 #endif //!COMPONENTARRAY_HPP
