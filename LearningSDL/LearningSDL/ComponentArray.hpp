@@ -12,20 +12,19 @@ public:
 };
 
 template <typename T>
-class ComponentArray : public IComponetArray
+class ComponentArray : public IComponentArray
 {
 public:
-
 	void InsertData(Entity entity, T component)
 	{
 		if (mEntitytoIndexMap.find(entity) != mEntitytoIndexMap.end())
 		{
-			std::cout << "\nTrying to add a duplicate component for the same entity.Ensure each entity has only one of this component type\n";
+			std::cout << "\nTrying to add a duplicate component for the same entity. Ensure each entity has only one of this component type\n";
 			return;
 		}
 		rsize_t newIndex = mSize;
 		mEntitytoIndexMap[entity] = newIndex;
-		mIndextoEntity[newIndex] = entity;
+		mIndextoEntityMap[newIndex] = entity;
 		mComponentArray[newIndex] = component;
 		++mSize;
 	}
@@ -35,7 +34,7 @@ public:
 
 		if(mEntitytoIndexMap.find(entity) == mEntitytoIndexMap.end())
 		{
-			::cout << "\nAttempting to delete an entity that does not exist.\n";
+			std::cout << "\nAttempting to delete an entity that does not exist.\n";
 			return;
 		}
 		rsize_t IndexOfRemovedEntity = mEntitytoIndexMap[entity];
