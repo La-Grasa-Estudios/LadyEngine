@@ -8,6 +8,8 @@
 #include "TexturedRectangle.hpp"
 #include "AnimatedSprite.hpp"
 
+#include "System.hpp"
+
 void SetPixel(SDL_Surface* surface, uint32_t x, uint32_t y, uint8_t R, uint8_t G, uint8_t B)
 {
     SDL_LockSurface(surface);
@@ -25,10 +27,10 @@ void move_rectangle(SDL_Rect& rectangle, uint32_t unx, uint32_t uny)
     rectangle.y = uny;
 }
 
-
 int main() 
 {
-    
+
+
     bool increment = true;
 
     uint32_t RED = 0;
