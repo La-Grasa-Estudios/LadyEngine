@@ -1,6 +1,7 @@
-#include "TransformSystem.hpp"
-#include "Coordinator.hpp"
-#include "TransformComponent.hpp"
+#include "..\systems\TransformSystem.hpp"
+#include "..\components\TransformComponent.hpp"
+#include "..\core\Coordinator.hpp"
+
 extern Coordinator gCoordinator;
 
 void MovementSystem::Init()

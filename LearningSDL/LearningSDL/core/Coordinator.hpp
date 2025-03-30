@@ -7,6 +7,8 @@
 #include "EntityManager.hpp"
 #include <memory>
 
+class EntityManager;
+
 class Coordinator
 {
 public:

@@ -1,5 +1,5 @@
 #pragma once
-#include "LadyMath.hpp"
+#include "..\math\LadyMath.hpp"
 
 struct Transform
 {

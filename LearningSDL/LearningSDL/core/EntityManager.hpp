@@ -2,7 +2,6 @@
 #ifndef ENTITYMANAGER_HPP
 #define ENTITYMANAGER_HPP
 
-
 #include "Entity.hpp"
 #include <iostream>
 #include <queue>
@@ -13,7 +12,7 @@ class EntityManager
 {
 public:
 	EntityManager();
-	//~EntityManager();
+	// ~EntityManager();
 
 	Entity CreateEntity();
 
@@ -22,9 +21,9 @@ public:
 	Signature GetSignature(Entity entity);
 
 private:
-	std::queue<Entity> mAvailableEntities{};
-	std::array<Signature, MAX_ENTITIES> mSignatures{};
-	uint64_t mLivingEntitiesCount{};
+	std::queue<Entity> mAvailableEntities;
+	std::array<Signature, MAX_ENTITIES> mSignatures;
+	uint64_t mLivingEntitiesCount;
 };
 
 #endif //!ENTITYMANAGER_HPP

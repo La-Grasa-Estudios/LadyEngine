@@ -7,8 +7,7 @@
 #include <iostream>
 #include "TexturedRectangle.hpp"
 #include "AnimatedSprite.hpp"
-#include "TransformComponent.hpp";
-#include "Coordinator.hpp"
+#include "core\Coordinator.hpp"
 
 
 
@@ -31,7 +30,7 @@ void move_rectangle(SDL_Rect& rectangle, uint32_t unx, uint32_t uny)
 
 Coordinator gCoordinator;
 
-int main() 
+int main()
 {
 
     bool increment = true;

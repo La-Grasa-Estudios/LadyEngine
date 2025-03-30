@@ -1,7 +1,7 @@
 #pragma once
 #ifndef COMPONENTS_HPP
 #define COMPONENTS_HPP
-#include "LadyMath.hpp"
+#include "..\math\LadyMath.hpp"
 #include <bitset>
 
 using ComponentType = std::uint8_t;

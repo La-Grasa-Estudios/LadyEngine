@@ -1,7 +1,7 @@
 #pragma once
 #ifndef LADYMATH_HPP
 #define LADYMATH_HPP
-#include <cmath>
+
 struct Vec2
 {
 	float x, y;
