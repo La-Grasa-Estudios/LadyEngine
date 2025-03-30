@@ -76,10 +76,10 @@ private:
 	{
 		const char* typeName = typeid(T).name();
 
-		if(mComponentTypes.find(typename) == mComponentTypes.end())
+		if(mComponentTypes.find(typeName) == mComponentTypes.end())
 		{
 			std::cout << "\nAttempting to get a ComponentArray that doesn't exist\n";
-			return -1;
+			return nullptr;
 		}
 		return std::static_pointer_cast<ComponentArray<T>>(mComponentArrays[typeName]);
 	}

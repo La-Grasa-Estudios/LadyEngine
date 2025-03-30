@@ -13,7 +13,7 @@ class EntityManager
 {
 public:
 	EntityManager();
-	~EntityManager();
+	//~EntityManager();
 
 	Entity CreateEntity();
 

@@ -10,10 +10,6 @@ const ComponentType MAX_COMPONENTS = 255;
 
 using Signature = std::bitset<MAX_COMPONENTS>;
 
-struct Transform
-{
-	Vec2 postition;
-	Vec2 scale;
-};
+
 
 #endif //!COMPONENTS_HPP
