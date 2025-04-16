@@ -12,7 +12,7 @@ void RenderSystem::Init()
 {
 
 }
-
+//fix
 void RenderSystem::Update(SDL_Renderer* renderer)
 {
 	for (Entity entity : mEntities)
