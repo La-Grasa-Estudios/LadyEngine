@@ -3,7 +3,7 @@
 #define COMPONENTARRAY_HPP
 #include <unordered_map>
 #include "Entity.hpp"
-
+//for every component there is a separate array
 class IComponentArray
 {
 public:

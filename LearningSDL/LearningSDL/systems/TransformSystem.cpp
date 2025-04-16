@@ -4,12 +4,12 @@
 
 extern Coordinator gCoordinator;
 
-void MovementSystem::Init()
+void TransformSystem::Init()
 {
 
 }
 
-void MovementSystem::Update(float deltaTime)
+void TransformSystem::Update(float deltaTime)
 {
 	for (auto const& entity : mEntities) 
 	{

@@ -18,7 +18,7 @@ public:
 		if (mSystems.find(typeName) != mSystems.end())
 		{
 			std::cout << "\nTrying to add an existing system\n";
-			return -1;
+			return nullptr;
 		}
 
 		auto system = std::make_shared<T>();

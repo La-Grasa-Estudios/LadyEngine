@@ -38,3 +38,22 @@ SDL_Surface* ResourceManager::get_surface(std::string path)
 	}
 	return nullptr;
 }
+
+SDL_Texture* ResourceManager::get_texture(SDL_Renderer* renderer, std::string path)
+{
+	if (textures.find(path) != textures.end()) 
+	{
+		return textures[path];
+		
+	}
+	else
+	{
+		SDL_Surface* surface = IMG_Load(path.c_str());
+		if (!surface) return nullptr;
+		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
+		if (!texture) return nullptr;
+		SDL_FreeSurface(surface);
+		textures.insert({ path, texture });
+		return textures[path];
+	}
+}

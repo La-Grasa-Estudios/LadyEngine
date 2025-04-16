@@ -32,7 +32,7 @@ public:
 	}
 
 	template <typename T>
-	void RegisterComponet()
+	void RegisterComponent()
 	{
 		mComponentManager->RegisterComponent<T>();
 	}
@@ -66,7 +66,7 @@ public:
 	}
 
 	template <typename T>
-	ComponentType GetComponentType(Entity entity)
+	ComponentType GetComponentType()
 	{
 		return mComponentManager->GetComponentType<T>();
 	}

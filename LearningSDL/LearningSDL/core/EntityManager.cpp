@@ -8,8 +8,6 @@ EntityManager::EntityManager()
 	}
 }
 
-
-
 Entity EntityManager::CreateEntity()
 {
 	if(mLivingEntitiesCount > MAX_ENTITIES)

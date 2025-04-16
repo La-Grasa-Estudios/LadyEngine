@@ -16,11 +16,10 @@ public:
 		if(mComponentTypes.find(typeName) != mComponentTypes.end())
 		{
 			std::cout << "\nTriying to add an existent component to an entity\n";
-			return -1;
+			return;
 		}
 
 		mComponentTypes.insert({ typeName, mNextComponentType });
-
 		mComponentArrays.insert({ typeName, std::make_shared<ComponentArray<T>>() });
 		++mNextComponentType;
 	}
