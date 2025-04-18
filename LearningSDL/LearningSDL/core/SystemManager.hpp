@@ -58,7 +58,7 @@ public:
 			auto const& system = pair.second;
 			auto const& SystemSignature = mSignatures[type];
 
-			if ((enttSignature & SystemSignature) == enttSignature)
+			if ((SystemSignature & enttSignature) == SystemSignature)
 			{
 				system->mEntities.insert(entity);
 			}

@@ -10,10 +10,10 @@ EntityManager::EntityManager()
 
 Entity EntityManager::CreateEntity()
 {
-	if(mLivingEntitiesCount > MAX_ENTITIES)
+	if(mLivingEntitiesCount >= MAX_ENTITIES)
 	{
 		std::cout << "\nToo many entities while creating an entity\n";
-		return -1;
+		return NULL;
 	}
 	else
 	{
@@ -22,14 +22,13 @@ Entity EntityManager::CreateEntity()
 		++mLivingEntitiesCount;
 		return id;
 	}
-
 }
 
 void EntityManager::DestroyEntity(Entity entity)
 {
 	if(entity < MAX_ENTITIES)
 	{
-		std::cout << "\nEntity out of range while to destroy an entity\n";
+		std::cout << "\nEntity out of range while destroying the entity\n";
 		return;
 	}
 	else

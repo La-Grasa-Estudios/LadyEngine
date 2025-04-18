@@ -4,7 +4,7 @@
 #include <iostream>
 
 using Entity = std::uint64_t;
-const Entity MAX_ENTITIES = 100000;
+const Entity MAX_ENTITIES = 99999;
 
 
 #endif //!ENTITY_HPP

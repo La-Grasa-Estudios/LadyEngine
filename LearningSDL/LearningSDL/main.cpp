@@ -10,20 +10,56 @@
 #include "components\AnimationComponent.hpp"
 #include "tools\generic_tools.hpp"
 
+#include <vector>
+
 Coordinator gCoordinator;
 
-//TODO: FiX SIGNATURE PROBLEM
 //CORRECT ANIMATIONSYSTEM
+
+
+
+
+void CreateEntity(std::vector<SDL_Rect> Frames)
+{
+    Entity entity = gCoordinator.CreateEntity();
+
+    gCoordinator.AddComponent<Transform>(entity,
+        { .position = Vec2{static_cast<float>(generic_tools::random_number(0,  1500)), static_cast<float>(generic_tools::random_number(0, 800)) }, .scale = Vec2{1.0f,1.0f} });
+
+    gCoordinator.AddComponent<Animation>(entity,
+        {
+         .frames = Frames,
+         .frameDuration = 1.0f / 12.0f,
+         .loop = true,
+         .isPlaying = true
+        });
+
+    gCoordinator.AddComponent<Renderable>
+        (entity,
+            {
+            .texture_path = "images/test.png",
+            .srcRect = Frames[0],
+            .color_mod = { 255, 255, 255, 255 },
+            .angle = 0.0f,
+            .flip = SDL_FLIP_NONE,
+            .origin = { 0, 0 },
+            .renderLayer = 1,
+            .isVisible = true
+            }
+        );
+
+}
 
 int main()
 {
 
     int ENTTQUANTITY;
+    std::cout << "\nPuedes hacer click para crear una entidad\n";
     std::cout << "Selecciona la cantidad de Entidades que deseas renderizar (cap 99999): ";
     std::cin >> ENTTQUANTITY;
 
     srand(time(0));
-    int frame = 0;
+
     gCoordinator.RegisterComponent<Transform>();
     gCoordinator.RegisterComponent<Renderable>();
     gCoordinator.RegisterComponent<Animation>();
@@ -39,8 +75,7 @@ int main()
     {
         Signature animationSignature;
         animationSignature.set(gCoordinator.GetComponentType<Animation>());
-        animationSignature.set(gCoordinator.GetComponentType<Renderable>());
-        animationSignature.set(gCoordinator.GetComponentType<Transform>());
+        animationSignature.set(gCoordinator.GetComponentType<Renderable>());        
         gCoordinator.SetSystemSignature<AnimationSystem>(animationSignature);
     }
 
@@ -49,7 +84,6 @@ int main()
         Signature renderSignature;
         renderSignature.set(gCoordinator.GetComponentType<Transform>());
         renderSignature.set(gCoordinator.GetComponentType<Renderable>());
-        renderSignature.set(gCoordinator.GetComponentType<Animation>());
         gCoordinator.SetSystemSignature<RenderSystem>(renderSignature);
     }
 
@@ -109,6 +143,7 @@ int main()
         );
 
     }
+
     bool run = true;
     SDL_Event event;
     Uint32 previous_time = SDL_GetTicks();
@@ -127,7 +162,18 @@ int main()
             {
                 run = false;
             }
+
+            if (event.button.button == SDL_BUTTON_LEFT)
+            {
+                if (event.type == SDL_MOUSEBUTTONDOWN) 
+                {
+
+                    CreateEntity(Frames);
+                }
+            }
+
         }
+
         SDL_RenderClear(renderer);
         animationSystem->Update(deltaTime);
         renderSystem->Update(renderer);
