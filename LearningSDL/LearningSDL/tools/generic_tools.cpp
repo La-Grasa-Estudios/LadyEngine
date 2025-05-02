@@ -31,3 +31,17 @@ void generic_tools::wait_for_enter()
 	std::cin.ignore();
 	while (std::cin.get() != '\n');
 }
+
+void generic_tools::CreateRect(std::vector<SDL_Rect>& Rect, int frames)
+{
+	for (int i = 0; i < frames ; ++i)
+	{
+		SDL_Rect frame;
+		frame.x = 0 + (128 * i);
+		frame.y = 0;
+		frame.w = 128;
+		frame.h = 128;
+
+		Rect.push_back(frame);
+	}
+}

@@ -11,6 +11,7 @@
 #include <thread>
 #include <chrono>
 #include <atomic>
+#include "SDL.h"
 
 namespace generic_tools 
 {
@@ -19,4 +20,5 @@ namespace generic_tools
 	void clear_console();
 	void sleep(int time);
 	void wait_for_enter();
+	void CreateRect(std::vector<SDL_Rect>& Rect, int frames);
 }
