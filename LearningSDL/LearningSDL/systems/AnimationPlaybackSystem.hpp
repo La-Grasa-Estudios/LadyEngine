@@ -1,6 +1,7 @@
 #pragma once
+#pragma once
 #include "..\core\System.hpp"
-class AnimationSystem : public System 
+class AnimationPlaybackSystem : public System
 {
 public:
 	void Init();
