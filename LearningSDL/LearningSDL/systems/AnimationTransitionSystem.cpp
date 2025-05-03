@@ -8,15 +8,15 @@
 
 extern Coordinator gCoordinator;
 
-void AnimationTransitionSystem::Init() 
+void AnimationTransitionSystem::Init()
 {
-	
+
 }
 
 
 void AnimationTransitionSystem::Update()
 {
-	for (Entity entity : mEntities) 
+	for (Entity entity : mEntities)
 	{
 		auto& animationRequest = gCoordinator.GetComponent<AnimationRequest>(entity);
 		auto& animationState = gCoordinator.GetComponent<AnimationState>(entity);
@@ -33,44 +33,44 @@ void AnimationTransitionSystem::Update()
 			bool pressed;
 			float animationDuration = currentAnimation.frameRate * currentAnimation.frames.size();
 
-			if (animationState.CurrentTime >= animationDuration) 
+			if (animationState.CurrentTime >= animationDuration)
 			{
 				pressed = true;
 				std::cout << "LA TECLA SE MANTIENE PRESIONADA" << "\n";
 				std::cout << "CurrentTime: " << animationState.CurrentTime << "\n";
 			}
-			else 
+			else
 			{
 				pressed = false;
 				std::cout << "LA TECLA NO SE ESTÁ PRESIONANDO" << "\n";
 				std::cout << "CurrentTime: " << animationState.CurrentTime << "\n";
 			}
 
-			if (nextState != animationState.CurrentState) 
+			if (nextState != animationState.CurrentState)
 			{
 
-				if (currentAnimation.isInterruptible) 
+				if (currentAnimation.isInterruptible)
 				{
 					animationState.CurrentTime = 0.0f;
 					animationState.CurrentState = nextState;
-					
+
 				}
 				else
 				{
-					if (pressed) 
+					if (pressed)
 					{
-						animationState.CurrentTime = 0.0f;		
+						animationState.CurrentTime = 0.0f;
 						animationState.CurrentState = nextState;
 					}
 				}
 			}
 			else
 			{
-				if (currentAnimation.isInterruptible) 
+				if (currentAnimation.isInterruptible)
 				{
 					return;
 				}
-				else 
+				else
 				{
 					if (pressed)
 					{
@@ -88,4 +88,3 @@ void AnimationTransitionSystem::Update()
 		}
 	}
 }
-

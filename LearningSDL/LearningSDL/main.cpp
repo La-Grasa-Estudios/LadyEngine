@@ -29,7 +29,7 @@ void CreateEntity(std::array<Animation, MAX_ANIMATIONS> animations)
 
     gCoordinator.AddComponent<AnimationRequest>(entity,
         {
-			.AnimationQueue = std::queue<states>(),
+            .AnimationQueue = std::queue<states>(),
         });
 
     gCoordinator.AddComponent<AnimationData>(entity,
@@ -39,12 +39,7 @@ void CreateEntity(std::array<Animation, MAX_ANIMATIONS> animations)
 
     gCoordinator.AddComponent<AnimationState>(entity,
         {
-
-			.CurrentTime = 0.0f,
-			.CurrentFrameTime = 0.0f,
-			.InLoop = true,
-			.IsInterruptible = true,
-       
+            .CurrentTime = 0.0f,
         });
 
 
@@ -52,7 +47,6 @@ void CreateEntity(std::array<Animation, MAX_ANIMATIONS> animations)
         (entity,
             {
             .texture_path = "",
-            .srcRect = animations[0].currentFrame,
             .color_mod = { 255, 255, 255, 255 },
             .angle = 0.0f,
             .flip = SDL_FLIP_NONE,
@@ -86,14 +80,14 @@ int main()
         gCoordinator.SetSystemSignature<TransformSystem>(transformSignature);
     }
 
-	auto animationTransitionSystem = gCoordinator.RegisterSystem<AnimationTransitionSystem>();
-	{
-		Signature animationTransitionSignature;
-		animationTransitionSignature.set(gCoordinator.GetComponentType<AnimationRequest>());
-		animationTransitionSignature.set(gCoordinator.GetComponentType<AnimationState>());
-		animationTransitionSignature.set(gCoordinator.GetComponentType<AnimationData>());
-		gCoordinator.SetSystemSignature<AnimationTransitionSystem>(animationTransitionSignature);
-	}
+    auto animationTransitionSystem = gCoordinator.RegisterSystem<AnimationTransitionSystem>();
+    {
+        Signature animationTransitionSignature;
+        animationTransitionSignature.set(gCoordinator.GetComponentType<AnimationRequest>());
+        animationTransitionSignature.set(gCoordinator.GetComponentType<AnimationState>());
+        animationTransitionSignature.set(gCoordinator.GetComponentType<AnimationData>());
+        gCoordinator.SetSystemSignature<AnimationTransitionSystem>(animationTransitionSignature);
+    }
 
     auto animationPlaybackSystem = gCoordinator.RegisterSystem<AnimationPlaybackSystem>();
     {
@@ -101,7 +95,7 @@ int main()
         animationPlaybackSignature.set(gCoordinator.GetComponentType<AnimationRequest>());
         animationPlaybackSignature.set(gCoordinator.GetComponentType<AnimationState>());
         animationPlaybackSignature.set(gCoordinator.GetComponentType<AnimationData>());
-        animationPlaybackSignature.set(gCoordinator.GetComponentType<Renderable>()); 
+        animationPlaybackSignature.set(gCoordinator.GetComponentType<Renderable>());
 
         gCoordinator.SetSystemSignature<AnimationPlaybackSystem>(animationPlaybackSignature);
     }
@@ -109,7 +103,7 @@ int main()
     auto transitionSystem = gCoordinator.RegisterSystem<RequestAnimationSystem>();
     {
         Signature transitionSignature;
-		transitionSignature.set(gCoordinator.GetComponentType<AnimationRequest>());
+        transitionSignature.set(gCoordinator.GetComponentType<AnimationRequest>());
         gCoordinator.SetSystemSignature<RequestAnimationSystem>(transitionSignature);
 
     }
@@ -123,10 +117,10 @@ int main()
     }
 
     SDL_Init(SDL_INIT_VIDEO);
-	SDL_Window* window = SDL_CreateWindow("ECS test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 900, SDL_WINDOW_SHOWN);
+    SDL_Window* window = SDL_CreateWindow("ECS test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 900, SDL_WINDOW_SHOWN);
 
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
     if (IMG_Init(IMG_INIT_PNG) == -1)
     {
         std::cout << "\nImage System could not load\n";
@@ -135,7 +129,7 @@ int main()
     {
         std::cout << "\nImage System ready to go\n";
     }
-    
+
     std::vector<SDL_Rect> WalkAnimation;
     std::vector<SDL_Rect> AttackAnimation;
     std::vector<SDL_Rect> TalkAnimation;
@@ -145,20 +139,20 @@ int main()
     generic_tools::CreateRect(WalkAnimation, 12);
     generic_tools::CreateRect(AttackAnimation, 8);
     generic_tools::CreateRect(TalkAnimation, 11);
-    generic_tools::CreateRect(IdleAnimation, 9 );
+    generic_tools::CreateRect(IdleAnimation, 9);
     generic_tools::CreateRect(ProtectionAnimation, 4);
 
 
-	
-    std::array<Animation, MAX_ANIMATIONS> Animations = 
-    {  
-       Animation{"images/Girl_1/Idle.png", IdleAnimation, 1.0f / 9.0f, 1.0f, 0, true, true},
-       Animation{"images/Girl_1/Walk.png", WalkAnimation, 1.0f / 12.0f, 1.0f, 0, true, true},  
-       Animation{"images/Girl_1/Attack.png", AttackAnimation, 1.0f / 8.0f, 1.0f, 0, false, false}, 
-       Animation{"images/Girl_1/Protection.png", ProtectionAnimation, 1.0f / 4.0f, 1.0f, 0, false, false},
-       Animation{"images/Girl_1/Talk.png", TalkAnimation, 1.0f / 11.0f, 1.0f, 0, true, true} 
+
+    std::array<Animation, MAX_ANIMATIONS> Animations =
+    {
+       Animation{"images/Girl_1/Idle.png", IdleAnimation, 1.0f / 9.0f, true, true},
+       Animation{"images/Girl_1/Walk.png", WalkAnimation, 1.0f / 12.0f, true, true},
+       Animation{"images/Girl_1/Attack.png", AttackAnimation, 1.0f / 8.0f, false, false},
+       Animation{"images/Girl_1/Protection.png", ProtectionAnimation, 1.0f / 4.0f, false, false, true},
+       Animation{"images/Girl_1/Talk.png", TalkAnimation, 1.0f / 11.0f, true, true}
     };
-		
+
     bool run = true;
     SDL_Event event;
     Uint32 previous_time = SDL_GetTicks();
@@ -169,19 +163,19 @@ int main()
         CreateEntity(Animations);
     }
 
-	const Uint8* state = SDL_GetKeyboardState(NULL);
+    const Uint8* state = SDL_GetKeyboardState(NULL);
 
     while (run)
     {
-        
+
 
         Uint32 current_time = SDL_GetTicks();
         deltaTime = (current_time - previous_time) / 1000.0f;
         previous_time = current_time;
 
         bool KeyIsPressed = false;
-        
-        
+
+
 
         while (SDL_PollEvent(&event))
         {
@@ -192,26 +186,26 @@ int main()
 
             if (event.button.button == SDL_BUTTON_LEFT)
             {
-                if (event.type == SDL_MOUSEBUTTONDOWN) 
+                if (event.type == SDL_MOUSEBUTTONDOWN)
                 {
                     CreateEntity(Animations);
                 }
             }
 
         }
-       // SDL_Delay(32);
-       //SDL_Delay(16);
-       //SDL_Delay(5);
-       //SDL_Delay(80);
+        // SDL_Delay(32);
+        //SDL_Delay(16);
+        //SDL_Delay(5);
+        //SDL_Delay(80);
 
-       for (int i = 0; i < 256; ++i)
-       {
-           if (state[i] == 1)
-           {
-               KeyIsPressed = true;
-           }
+        for (int i = 0; i < 256; ++i)
+        {
+            if (state[i] == 1)
+            {
+                KeyIsPressed = true;
+            }
 
-       }
+        }
         //std::cout << "Is key Pressed? : " << KeyIsPressed << "\n";
         if (state[SDL_SCANCODE_D])
         {
@@ -229,7 +223,7 @@ int main()
         {
             transitionSystem->Update(COVER);
         }
-        if (!KeyIsPressed) 
+        if (!KeyIsPressed)
         {
             transitionSystem->Update(IDLE);
         }
@@ -241,9 +235,9 @@ int main()
         //TranformSystem->Update(deltaTime);
         renderSystem->Update(renderer);
         SDL_RenderPresent(renderer);
-        
-        
-        
+
+
+
     }
 
 }

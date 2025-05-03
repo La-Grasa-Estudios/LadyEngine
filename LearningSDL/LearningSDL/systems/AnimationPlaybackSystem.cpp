@@ -10,9 +10,9 @@
 
 extern Coordinator gCoordinator;
 
-void AnimationPlaybackSystem::Init() 
+void AnimationPlaybackSystem::Init()
 {
-	
+
 }
 
 void AnimationPlaybackSystem::Update(float deltaTime)
@@ -27,26 +27,26 @@ void AnimationPlaybackSystem::Update(float deltaTime)
 		Animation& currentAnimation = animationData.Animations[animationState.CurrentState];
 
 		animationState.CurrentTime += deltaTime;
-		
+
 		float animationDuration = currentAnimation.frameRate * currentAnimation.frames.size();
 
 		if (animationState.CurrentTime >= animationDuration)
 		{
-			if (!currentAnimation.loop) 
+			if (!currentAnimation.loop)
 			{
 				animationState.CurrentTime = animationDuration;
 			}
-			else 
+			else
 			{
-					animationState.CurrentTime = 0.0f;
+				animationState.CurrentTime = 0.0f;
 			}
 		}
 
 		animationState.CurrentFrame = (int)std::floor(animationState.CurrentTime / currentAnimation.frameRate);
-		
-		if (!currentAnimation.loop && animationState.CurrentTime >= animationDuration) 
+
+		if (!currentAnimation.loop && animationState.CurrentTime >= animationDuration)
 		{
-			if (currentAnimation.hasToLock) 
+			if (currentAnimation.hasToLock)
 			{
 				animationState.CurrentFrame = (int)currentAnimation.frames.size() - 1;
 			}
@@ -55,7 +55,7 @@ void AnimationPlaybackSystem::Update(float deltaTime)
 				animationState.CurrentFrame = std::min(animationState.CurrentFrame, (int)currentAnimation.frames.size() - 1);
 			}
 		}
-		else 
+		else
 		{
 			animationState.CurrentFrame = animationState.CurrentFrame % currentAnimation.frames.size();
 		}
