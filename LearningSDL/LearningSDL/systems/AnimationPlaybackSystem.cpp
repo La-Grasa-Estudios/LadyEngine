@@ -3,8 +3,8 @@
 #include "..\components\AnimationStateComponent.hpp"
 #include "..\components\AnimationDataComponent.hpp"
 #include "..\components\RenderableComponent.hpp"
-
 #include "..\core\Coordinator.hpp"
+
 #include <algorithm>
 #include <cmath>
 
@@ -27,57 +27,34 @@ void AnimationPlaybackSystem::Update(float deltaTime)
 		Animation& currentAnimation = animationData.Animations[animationState.CurrentState];
 
 		animationState.CurrentTime += deltaTime;
-		animationState.CurrentFrameTime += deltaTime;
-
-		//Calculate the frame to renderize
-
-		if (animationState.CurrentFrameTime >= currentAnimation.frameRate)
-		{
-			animationState.CurrentFrameTime = 0.0f;
-			currentAnimation.currentFrame++;
-
-			if (currentAnimation.currentFrame >= currentAnimation.frames.size())
-			{
-				currentAnimation.currentFrame = 0;
-			}
-			//if (currentAnimation.loop) {
-				//currentAnimation.currentFrame = 0;
-			//}
-			//else 
-			//{
-
-				//currentAnimation.currentFrame = currentAnimation.frames.size() - 1;
-			//}
-
-		}
-		/////
-
+		
 		float animationDuration = currentAnimation.frameRate * currentAnimation.frames.size();
 
 		if (animationState.CurrentTime >= animationDuration)
 		{
-			if (!currentAnimation.loop) {
-
-				int neededFrame = std::min(currentAnimation.currentFrame, (int)currentAnimation.frames.size() - 1);
-
-				currentAnimation.currentFrame = neededFrame;
-
-				std::cout << "Needed frame = " << neededFrame << "\n";
-			}
-
-			else
+			if (!animationState.InLoop) 
 			{
-
+				animationState.CurrentTime = animationDuration;
+			}
+			else 
+			{
 				animationState.CurrentTime = 0.0f;
-				animationState.CurrentFrameTime = 0.0f;
-				currentAnimation.currentFrame = 0;
 			}
 		}
+
+		currentAnimation.currentFrame = (int)std::floor(animationState.CurrentTime / currentAnimation.frameRate);
+		
+		if (!animationState.InLoop && animationState.CurrentTime >= animationDuration) 
+		{
+			currentAnimation.currentFrame = std::min(currentAnimation.currentFrame, (int)currentAnimation.frames.size() - 1);
+		}
+		else 
+		{
+			currentAnimation.currentFrame = currentAnimation.currentFrame % currentAnimation.frames.size();
+		}
+
 		renderable.srcRect = currentAnimation.frames[currentAnimation.currentFrame];
 		renderable.texture_path = currentAnimation.TexturePath;
+
 	}
-
 }
-
-
-
