@@ -22,22 +22,31 @@ void AnimationTransitionSystem::Update()
 		auto& animationState = gCoordinator.GetComponent<AnimationState>(entity);
 		auto& animationData = gCoordinator.GetComponent<AnimationData>(entity);
 
-		if (!animationRequest.AnimationQueue.empty())
+		Animation& currentAnimation = animationData.Animations[animationState.CurrentState];
+		float animationDuration = currentAnimation.frameRate * currentAnimation.frames.size();
+
+		if (animationState.CurrentTime >= animationDuration && !currentAnimation.loop && currentAnimation.nextState != NONE)
+		{
+			Animation& nextAnimation = animationData.Animations[currentAnimation.nextState];
+			animationState.CurrentTime = 0.0f;
+			animationState.CurrentState = currentAnimation.nextState;
+			animationState.CurrentFrame = 0;
+		}
+
+		while (!animationRequest.AnimationQueue.empty())
 		{
 			states nextState = animationRequest.AnimationQueue.front();
 			animationRequest.AnimationQueue.pop();
 
 			if (nextState != animationState.CurrentState) 
 			{
-				Animation& currentAnimation = animationData.Animations[animationState.CurrentState];
 				Animation& nextAnimation = animationData.Animations[nextState];
 
-				if (animationState.CurrentTime >= currentAnimation.duration || animationState.IsInterruptible) 
+				if (currentAnimation.isInterruptible)
 				{
 					animationState.CurrentTime = 0.0f;
-					animationState.InLoop = nextAnimation.loop;
-					animationState.IsInterruptible = nextAnimation.isInterruptible;
 					animationState.CurrentState = nextState;
+					animationState.CurrentFrame = 0;
 				}
 				else 
 				{

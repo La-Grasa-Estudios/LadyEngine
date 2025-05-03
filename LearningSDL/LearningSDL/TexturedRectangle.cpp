@@ -31,12 +31,17 @@ void TexturedRectangle::set_texture()
 
 void TexturedRectangle::set_render_copy()
 {
-	SDL_RenderCopy(render, texture, NULL, &rectangle);
+	SDL_FRect rect;
+	rect.x = rectangle.x;
+	rect.y = rectangle.y;
+	rect.w = rectangle.w;
+	rect.h = rectangle.h;
+	SDL_RenderTexture(render, texture, NULL, &rect);
 }
 
-SDL_bool TexturedRectangle::is_coliding_with(TexturedRectangle& obj)
+bool TexturedRectangle::is_coliding_with(TexturedRectangle& obj)
 {
-	return SDL_HasIntersection(&rectangle, obj.get_rect());
+	return SDL_HasRectIntersection(&rectangle, obj.get_rect());
 }
 
 SDL_Rect* TexturedRectangle::get_rect()

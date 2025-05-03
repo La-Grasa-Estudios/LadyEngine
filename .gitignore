@@ -1,0 +1,10 @@
+*.obj
+*.cso
+*.spv
+*.pdb
+*.dll
+/.vs
+/x64
+LearningSDL/.vs
+LearningSDL/x64
+LearningSDL/LearningSDL/x64

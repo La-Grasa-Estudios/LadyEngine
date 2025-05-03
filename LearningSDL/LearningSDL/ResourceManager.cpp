@@ -9,7 +9,7 @@ ResourceManager::~ResourceManager()
 {
 	for (auto& key_surface : surfaces)
 	{
-		SDL_FreeSurface(key_surface.second);
+		SDL_DestroySurface(key_surface.second);
 	}
 	std::unordered_map<std::string, SDL_Surface*>().swap(surfaces);
 	std::cout << "\nresource manager destructor called\n";
@@ -52,7 +52,7 @@ SDL_Texture* ResourceManager::get_texture(SDL_Renderer* renderer, std::string pa
 		if (!surface) return nullptr;
 		SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
 		if (!texture) return nullptr;
-		SDL_FreeSurface(surface);
+		SDL_DestroySurface(surface);
 		textures.insert({ path, texture });
 		return textures[path];
 	}

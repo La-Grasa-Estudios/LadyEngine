@@ -1,9 +1,8 @@
 #pragma once
 #ifndef RESOURCEMANAGER_HPP
 #define RESOURCEMANAGER_HPP
-#include <SDL.h>
-#include <SDL_image.h>
-#include <SDL_ttf.h>
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_image.h>
 #include <unordered_map>
 #include <string>
 class ResourceManager

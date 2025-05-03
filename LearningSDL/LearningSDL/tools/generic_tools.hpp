@@ -11,7 +11,7 @@
 #include <thread>
 #include <chrono>
 #include <atomic>
-#include "SDL.h"
+#include <SDL3/SDL.h>
 
 namespace generic_tools 
 {

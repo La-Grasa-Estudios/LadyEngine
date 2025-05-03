@@ -6,4 +6,5 @@ enum states : char
 	ATTACK,
 	COVER,
 	TALK,
+	NONE,
 };

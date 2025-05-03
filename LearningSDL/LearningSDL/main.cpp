@@ -1,6 +1,6 @@
 #define SDL_MAIN_HANDLED
-#include <SDL.h> 
-#include <SDL_image.h>
+#include <SDL3/SDL.h> 
+#include <SDL3/SDL_image.h> 
 #include "core\Coordinator.hpp"
 #include "systems\TransformSystem.hpp"
 #include "systems\RenderSystem.hpp"
@@ -20,7 +20,7 @@ Coordinator gCoordinator;
 
 //CORRECT ANIMATIONSYSTEM
 
-void CreateEntity(std::array<Animation, MAX_ANIMATIONS> animations)
+Entity CreateEntity(std::array<Animation, MAX_ANIMATIONS> animations)
 {
     Entity entity = gCoordinator.CreateEntity();
 
@@ -42,10 +42,7 @@ void CreateEntity(std::array<Animation, MAX_ANIMATIONS> animations)
 			.CurrentState = states::IDLE,
 			.CurrentTime = 0.0f,
 			.CurrentFrameTime = 0.0f,
-			.InLoop = true,
-			.IsInterruptible = true,
-			.NextState = states::IDLE,
-			        
+			.CurrentFrame = 0,
         });
 
 
@@ -53,7 +50,7 @@ void CreateEntity(std::array<Animation, MAX_ANIMATIONS> animations)
         (entity,
             {
             .texture_path = "",
-            .srcRect = animations[0].currentFrame,
+            .srcRect = animations[0].frames[0],
             .color_mod = { 255, 255, 255, 255 },
             .angle = 0.0f,
             .flip = SDL_FLIP_NONE,
@@ -63,6 +60,7 @@ void CreateEntity(std::array<Animation, MAX_ANIMATIONS> animations)
             }
         );
 
+    return entity;
 }
 
 int main()
@@ -124,18 +122,9 @@ int main()
     }
 
     SDL_Init(SDL_INIT_VIDEO);
-	SDL_Window* window = SDL_CreateWindow("ECS test", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1600, 900, SDL_WINDOW_SHOWN);
+	SDL_Window* window = SDL_CreateWindow("ECS test", 1600, 900, 0);
 
-	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-	
-    if (IMG_Init(IMG_INIT_PNG) == -1)
-    {
-        std::cout << "\nImage System could not load\n";
-    }
-    else
-    {
-        std::cout << "\nImage System ready to go\n";
-    }
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, 0);
     
     std::vector<SDL_Rect> WalkAnimation;
     std::vector<SDL_Rect> AttackAnimation;
@@ -153,11 +142,11 @@ int main()
 	
     std::array<Animation, MAX_ANIMATIONS> Animations = 
     {  
-       Animation{"images/Girl_1/Idle.png", IdleAnimation, 1.0f / 9.0f, 1.2f, 0, true, true},
-       Animation{"images/Girl_1/Walk.png", WalkAnimation, 1.0f / 12.0f, 1.0f, 0, false, true},  
-       Animation{"images/Girl_1/Attack.png", AttackAnimation, 1.0f / 8.0f, 1.2f, 0, false, true}, 
-       Animation{"images/Girl_1/Protection.png", ProtectionAnimation, 1.0f / 4.0f, 1.2f, 0, false, true},
-       Animation{"images/Girl_1/Talk.png", TalkAnimation, 1.0f / 11.0f, 1.2f, 0, false, true} 
+       Animation{"images/Girl_1/Idle.png", IdleAnimation, 1.0f / 9.0f, 1.2f, true, true},
+       Animation{"images/Girl_1/Walk.png", WalkAnimation, 1.0f / 12.0f, 1.0f, true, true, IDLE},  
+       Animation{"images/Girl_1/Attack.png", AttackAnimation, 1.0f / 8.0f, 1.2f, false, false, IDLE}, 
+       Animation{"images/Girl_1/Protection.png", ProtectionAnimation, 1.0f / 4.0f, 1.2f, false, true, NONE},
+       Animation{"images/Girl_1/Talk.png", TalkAnimation, 1.0f / 11.0f, 1.2f, false, true, IDLE} 
     };
 		
     bool run = true;
@@ -165,14 +154,9 @@ int main()
     Uint32 previous_time = SDL_GetTicks();
     float deltaTime = 0.0f;
 
-    for (int i = 0; i < ENTTQUANTITY; ++i)
-    {
-        CreateEntity(Animations);
-    }
+    Entity entity = CreateEntity(Animations);;
 
-	const Uint8* state = SDL_GetKeyboardState(NULL);
-
-    
+	const bool* state = SDL_GetKeyboardState(NULL);
 
     while (run)
     {
@@ -193,25 +177,24 @@ int main()
 
         while (SDL_PollEvent(&event))
         {
-            if (event.type == SDL_QUIT)
+            if (event.type == SDL_EVENT_QUIT)
             {
                 run = false;
             }
-
-            if (event.button.button == SDL_BUTTON_LEFT)
-            {
-                if (event.type == SDL_MOUSEBUTTONDOWN) 
-                {
-                    CreateEntity(Animations);
-                }
-            }
-
         }
+
+        auto& renderable = gCoordinator.GetComponent<Renderable>(entity);
         
         std::cout << "Is key Pressed? : " << KeyIsPressed << "\n";
         if (state[SDL_SCANCODE_D])
         {
             transitionSystem->Update(WALK);
+            renderable.flip = SDL_FLIP_NONE;
+        }
+        if (state[SDL_SCANCODE_A])
+        {
+            transitionSystem->Update(WALK);
+            renderable.flip = SDL_FLIP_HORIZONTAL;
         }
         if (state[SDL_SCANCODE_T])
         {
@@ -225,11 +208,10 @@ int main()
         {
             transitionSystem->Update(COVER);
         }
-        if (!KeyIsPressed) 
+        if (!KeyIsPressed)
         {
             transitionSystem->Update(IDLE);
         }
-
 
         SDL_RenderClear(renderer);
 		animationTransitionSystem->Update();

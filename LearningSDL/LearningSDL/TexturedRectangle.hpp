@@ -1,7 +1,7 @@
 #pragma once
 #ifndef TEXTUREDRECTANGLE_HPP
 #define TEXTUREDRECTANGLE_HPP
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include <string>
 class TexturedRectangle
 {
@@ -18,7 +18,7 @@ public:
 	void set_texture();
 	void set_render_copy();
 	SDL_Rect* get_rect();
-	SDL_bool is_coliding_with(TexturedRectangle& obj);
+	bool is_coliding_with(TexturedRectangle& obj);
 
 };
 

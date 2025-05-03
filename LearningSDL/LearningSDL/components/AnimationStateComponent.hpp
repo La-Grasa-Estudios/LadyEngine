@@ -2,7 +2,7 @@
 #include <array>
 #include <string>
 #include <queue>
-#include <SDL.h>
+#include <SDL3/SDL.h>
 #include "..\Data\States.hpp"
 
 struct AnimationState 
@@ -10,9 +10,7 @@ struct AnimationState
     states CurrentState;
     float CurrentTime;
     float CurrentFrameTime;
-    bool InLoop;
-    bool IsInterruptible;
-    states NextState;
+    int CurrentFrame = 0;
 }; 
 
 

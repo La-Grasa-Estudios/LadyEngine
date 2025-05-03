@@ -30,42 +30,22 @@ void AnimationPlaybackSystem::Update(float deltaTime)
 
 		//Calculate the frame to renderize
 
-		if (animationState.CurrentFrameTime >= currentAnimation.frameRate) 
+		while (animationState.CurrentFrameTime >= currentAnimation.frameRate) 
 		{
-			animationState.CurrentFrameTime = 0.0f;
-			currentAnimation.currentFrame++;
-
-			if (currentAnimation.currentFrame >= currentAnimation.frames.size()) 
-			{
-				currentAnimation.currentFrame = 0;
-			}
-			//if (currentAnimation.loop) {
-				//currentAnimation.currentFrame = 0;
-			//}
-			//else 
-			//{
-				
-				//currentAnimation.currentFrame = currentAnimation.frames.size() - 1;
-			//}
-
-		}
-		/////
-
-		if (animationState.CurrentTime >= currentAnimation.duration && !animationState.InLoop) 
-		{
-			animationState.CurrentState = animationState.NextState;
-			animationState.CurrentTime = 0.0f;
-			currentAnimation.currentFrame = 0;
-
-		}
-		else if (animationState.CurrentTime >= currentAnimation.duration && animationState.InLoop) 
-		{
-			animationState.CurrentTime = 0.0f;
-			animationState.CurrentFrameTime = 0.0f;
-			currentAnimation.currentFrame = 0;
+			animationState.CurrentFrameTime -= currentAnimation.frameRate;
+			animationState.CurrentFrame++;
 		}
 
-		renderable.srcRect = currentAnimation.frames[currentAnimation.currentFrame];
+		if (!currentAnimation.loop)
+		{
+			animationState.CurrentFrame = std::min(animationState.CurrentFrame, (int)currentAnimation.frames.size() - 1);
+		}
+		else
+		{
+			animationState.CurrentFrame = animationState.CurrentFrame % currentAnimation.frames.size();
+		}
+
+		renderable.srcRect = currentAnimation.frames[animationState.CurrentFrame];
 		renderable.texture_path = currentAnimation.TexturePath;
 	}
 
