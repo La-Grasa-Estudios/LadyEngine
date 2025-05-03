@@ -9,9 +9,7 @@ struct AnimationState
 {
     states CurrentState;
     float CurrentTime;
-    float CurrentFrameTime;
-    bool InLoop;
-    bool IsInterruptible;
+    int CurrentFrame;
     states NextState;
 }; 
 

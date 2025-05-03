@@ -9,9 +9,9 @@ struct Animation
 {
     std::string TexturePath;
     std::vector<SDL_Rect> frames;
-    float frameRate = 0.0f;
-    float duration = 0.0f; //Animation duration
-    int currentFrame = 0;
-    bool loop = true;
+    float frameRate;
+    bool loop;
     bool isInterruptible;
+	bool hasToLock = false; //Controls if the animation needs to lock in the last frame if it is not looped and the animation time has ended
+    int startFrame = 0;
 };

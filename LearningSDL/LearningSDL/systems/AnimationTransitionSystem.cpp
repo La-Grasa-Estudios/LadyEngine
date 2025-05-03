@@ -22,8 +22,6 @@ void AnimationTransitionSystem::Update()
 		auto& animationState = gCoordinator.GetComponent<AnimationState>(entity);
 		auto& animationData = gCoordinator.GetComponent<AnimationData>(entity);
 
-
-
 		if (!animationRequest.AnimationQueue.empty())
 		{
 			states nextState = animationRequest.AnimationQueue.front();
@@ -51,47 +49,43 @@ void AnimationTransitionSystem::Update()
 			if (nextState != animationState.CurrentState) 
 			{
 
-				if (animationState.IsInterruptible) 
+				if (currentAnimation.isInterruptible) 
 				{
 					animationState.CurrentTime = 0.0f;
-					animationState.InLoop = nextAnimation.loop;
-					animationState.IsInterruptible = nextAnimation.isInterruptible;
 					animationState.CurrentState = nextState;
-					currentAnimation.currentFrame = 0;
+					
 				}
 				else
 				{
 					if (pressed) 
 					{
-						animationState.CurrentTime = 0.0f;
-						animationState.InLoop = nextAnimation.loop;
-						animationState.IsInterruptible = nextAnimation.isInterruptible;
+						animationState.CurrentTime = 0.0f;		
 						animationState.CurrentState = nextState;
-						currentAnimation.currentFrame = 0;
 					}
 				}
 			}
 			else
 			{
-				if (animationState.IsInterruptible) 
+				if (currentAnimation.isInterruptible) 
 				{
-					
 					return;
 				}
 				else 
 				{
-					if (pressed) 
+					if (pressed)
 					{
-						
-						animationState.CurrentTime = 0.0f;
-						//currentAnimation.currentFrame = 0;
+						if (currentAnimation.hasToLock)
+						{
+							return;
+						}
+						else
+						{
+							animationState.CurrentTime = 0.0f;
+						}
 					}
 				}
-				
 			}
-
 		}
-
 	}
 }
 

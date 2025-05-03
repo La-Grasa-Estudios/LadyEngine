@@ -32,28 +32,35 @@ void AnimationPlaybackSystem::Update(float deltaTime)
 
 		if (animationState.CurrentTime >= animationDuration)
 		{
-			if (!animationState.InLoop) 
+			if (!currentAnimation.loop) 
 			{
 				animationState.CurrentTime = animationDuration;
 			}
 			else 
 			{
-				animationState.CurrentTime = 0.0f;
+					animationState.CurrentTime = 0.0f;
 			}
 		}
 
-		currentAnimation.currentFrame = (int)std::floor(animationState.CurrentTime / currentAnimation.frameRate);
+		animationState.CurrentFrame = (int)std::floor(animationState.CurrentTime / currentAnimation.frameRate);
 		
-		if (!animationState.InLoop && animationState.CurrentTime >= animationDuration) 
+		if (!currentAnimation.loop && animationState.CurrentTime >= animationDuration) 
 		{
-			currentAnimation.currentFrame = std::min(currentAnimation.currentFrame, (int)currentAnimation.frames.size() - 1);
+			if (currentAnimation.hasToLock) 
+			{
+				animationState.CurrentFrame = (int)currentAnimation.frames.size() - 1;
+			}
+			else
+			{
+				animationState.CurrentFrame = std::min(animationState.CurrentFrame, (int)currentAnimation.frames.size() - 1);
+			}
 		}
 		else 
 		{
-			currentAnimation.currentFrame = currentAnimation.currentFrame % currentAnimation.frames.size();
+			animationState.CurrentFrame = animationState.CurrentFrame % currentAnimation.frames.size();
 		}
 
-		renderable.srcRect = currentAnimation.frames[currentAnimation.currentFrame];
+		renderable.srcRect = currentAnimation.frames[animationState.CurrentFrame];
 		renderable.texture_path = currentAnimation.TexturePath;
 
 	}
