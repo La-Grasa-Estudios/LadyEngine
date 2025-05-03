@@ -5,6 +5,8 @@
 #include "..\components\RenderableComponent.hpp"
 
 #include "..\core\Coordinator.hpp"
+#include <algorithm>
+#include <cmath>
 
 extern Coordinator gCoordinator;
 
@@ -13,12 +15,11 @@ void AnimationPlaybackSystem::Init()
 	
 }
 
-
 void AnimationPlaybackSystem::Update(float deltaTime)
 {
-	for (Entity entity : mEntities) 
+	for (Entity entity : mEntities)
 	{
-		auto& animationRequest = gCoordinator.GetComponent<AnimationRequest>(entity);	
+		auto& animationRequest = gCoordinator.GetComponent<AnimationRequest>(entity);
 		auto& animationState = gCoordinator.GetComponent<AnimationState>(entity);
 		auto& animationData = gCoordinator.GetComponent<AnimationData>(entity);
 		auto& renderable = gCoordinator.GetComponent<Renderable>(entity);
@@ -30,12 +31,12 @@ void AnimationPlaybackSystem::Update(float deltaTime)
 
 		//Calculate the frame to renderize
 
-		if (animationState.CurrentFrameTime >= currentAnimation.frameRate) 
+		if (animationState.CurrentFrameTime >= currentAnimation.frameRate)
 		{
 			animationState.CurrentFrameTime = 0.0f;
 			currentAnimation.currentFrame++;
 
-			if (currentAnimation.currentFrame >= currentAnimation.frames.size()) 
+			if (currentAnimation.currentFrame >= currentAnimation.frames.size())
 			{
 				currentAnimation.currentFrame = 0;
 			}
@@ -44,29 +45,39 @@ void AnimationPlaybackSystem::Update(float deltaTime)
 			//}
 			//else 
 			//{
-				
+
 				//currentAnimation.currentFrame = currentAnimation.frames.size() - 1;
 			//}
 
 		}
 		/////
 
-		if (animationState.CurrentTime >= currentAnimation.duration && !animationState.InLoop) 
-		{
-			animationState.CurrentState = animationState.NextState;
-			animationState.CurrentTime = 0.0f;
-			currentAnimation.currentFrame = 0;
+		float animationDuration = currentAnimation.frameRate * currentAnimation.frames.size();
 
-		}
-		else if (animationState.CurrentTime >= currentAnimation.duration && animationState.InLoop) 
+		if (animationState.CurrentTime >= animationDuration)
 		{
-			animationState.CurrentTime = 0.0f;
-			animationState.CurrentFrameTime = 0.0f;
-			currentAnimation.currentFrame = 0;
-		}
+			if (!currentAnimation.loop) {
 
+				int neededFrame = std::min(currentAnimation.currentFrame, (int)currentAnimation.frames.size() - 1);
+
+				currentAnimation.currentFrame = neededFrame;
+
+				std::cout << "Needed frame = " << neededFrame << "\n";
+			}
+
+			else
+			{
+
+				animationState.CurrentTime = 0.0f;
+				animationState.CurrentFrameTime = 0.0f;
+				currentAnimation.currentFrame = 0;
+			}
+		}
 		renderable.srcRect = currentAnimation.frames[currentAnimation.currentFrame];
 		renderable.texture_path = currentAnimation.TexturePath;
 	}
 
 }
+
+
+

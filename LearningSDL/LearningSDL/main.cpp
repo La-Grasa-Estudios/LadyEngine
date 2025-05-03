@@ -25,7 +25,7 @@ void CreateEntity(std::array<Animation, MAX_ANIMATIONS> animations)
     Entity entity = gCoordinator.CreateEntity();
 
     gCoordinator.AddComponent<Transform>(entity,
-        { .position = Vec2{static_cast<float>(generic_tools::random_number(0,  1500)), static_cast<float>(generic_tools::random_number(0, 800)) }, .scale = Vec2{1.0f,1.0f} });
+        { .position = Vec2{static_cast<float>(generic_tools::random_number(0,  400)), static_cast<float>(generic_tools::random_number(0, 200)) }, .scale = Vec2{3.0f,3.0f} });
 
     gCoordinator.AddComponent<AnimationRequest>(entity,
         {
@@ -39,13 +39,12 @@ void CreateEntity(std::array<Animation, MAX_ANIMATIONS> animations)
 
     gCoordinator.AddComponent<AnimationState>(entity,
         {
-			.CurrentState = states::IDLE,
+
 			.CurrentTime = 0.0f,
 			.CurrentFrameTime = 0.0f,
 			.InLoop = true,
 			.IsInterruptible = true,
-			.NextState = states::IDLE,
-			        
+       
         });
 
 
@@ -153,11 +152,11 @@ int main()
 	
     std::array<Animation, MAX_ANIMATIONS> Animations = 
     {  
-       Animation{"images/Girl_1/Idle.png", IdleAnimation, 1.0f / 9.0f, 1.2f, 0, true, true},
-       Animation{"images/Girl_1/Walk.png", WalkAnimation, 1.0f / 12.0f, 1.0f, 0, false, true},  
-       Animation{"images/Girl_1/Attack.png", AttackAnimation, 1.0f / 8.0f, 1.2f, 0, false, true}, 
-       Animation{"images/Girl_1/Protection.png", ProtectionAnimation, 1.0f / 4.0f, 1.2f, 0, false, true},
-       Animation{"images/Girl_1/Talk.png", TalkAnimation, 1.0f / 11.0f, 1.2f, 0, false, true} 
+       Animation{"images/Girl_1/Idle.png", IdleAnimation, 1.0f / 9.0f, 1.0f, 0, true, true},
+       Animation{"images/Girl_1/Walk.png", WalkAnimation, 1.0f / 12.0f, 1.0f, 0, true, true},  
+       Animation{"images/Girl_1/Attack.png", AttackAnimation, 1.0f / 8.0f, 1.0f, 0, false, false}, 
+       Animation{"images/Girl_1/Protection.png", ProtectionAnimation, 1.0f / 4.0f, 1.0f, 0, false, false},
+       Animation{"images/Girl_1/Talk.png", TalkAnimation, 1.0f / 11.0f, 1.0f, 0, true, true} 
     };
 		
     bool run = true;
@@ -172,24 +171,17 @@ int main()
 
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 
-    
-
     while (run)
     {
+        
+
         Uint32 current_time = SDL_GetTicks();
         deltaTime = (current_time - previous_time) / 1000.0f;
         previous_time = current_time;
 
         bool KeyIsPressed = false;
         
-        for (int i = 0; i < 256; ++i) 
-        {
-            if(state[i] == 1)
-            {
-				KeyIsPressed = true;
-			}
-
-        }
+        
 
         while (SDL_PollEvent(&event))
         {
@@ -207,8 +199,20 @@ int main()
             }
 
         }
-        
-        std::cout << "Is key Pressed? : " << KeyIsPressed << "\n";
+       // SDL_Delay(32);
+       //SDL_Delay(16);
+       //SDL_Delay(5);
+       //SDL_Delay(80);
+
+       for (int i = 0; i < 256; ++i)
+       {
+           if (state[i] == 1)
+           {
+               KeyIsPressed = true;
+           }
+
+       }
+        //std::cout << "Is key Pressed? : " << KeyIsPressed << "\n";
         if (state[SDL_SCANCODE_D])
         {
             transitionSystem->Update(WALK);
@@ -232,11 +236,12 @@ int main()
 
 
         SDL_RenderClear(renderer);
-		animationTransitionSystem->Update();
-		animationPlaybackSystem->Update(deltaTime);
+        animationPlaybackSystem->Update(deltaTime);
+        animationTransitionSystem->Update();
         //TranformSystem->Update(deltaTime);
         renderSystem->Update(renderer);
         SDL_RenderPresent(renderer);
+        
         
         
     }

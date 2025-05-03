@@ -22,29 +22,74 @@ void AnimationTransitionSystem::Update()
 		auto& animationState = gCoordinator.GetComponent<AnimationState>(entity);
 		auto& animationData = gCoordinator.GetComponent<AnimationData>(entity);
 
+
+
 		if (!animationRequest.AnimationQueue.empty())
 		{
 			states nextState = animationRequest.AnimationQueue.front();
 			animationRequest.AnimationQueue.pop();
 
+			Animation& currentAnimation = animationData.Animations[animationState.CurrentState];
+			Animation& nextAnimation = animationData.Animations[nextState];
+
+			bool pressed;
+			float animationDuration = currentAnimation.frameRate * currentAnimation.frames.size();
+
+			if (animationState.CurrentTime >= animationDuration) 
+			{
+				pressed = true;
+				std::cout << "LA TECLA SE MANTIENE PRESIONADA" << "\n";
+				std::cout << "CurrentTime: " << animationState.CurrentTime << "\n";
+			}
+			else 
+			{
+				pressed = false;
+				std::cout << "LA TECLA NO SE ESTÁ PRESIONANDO" << "\n";
+				std::cout << "CurrentTime: " << animationState.CurrentTime << "\n";
+			}
+
 			if (nextState != animationState.CurrentState) 
 			{
-				Animation& currentAnimation = animationData.Animations[animationState.CurrentState];
-				Animation& nextAnimation = animationData.Animations[nextState];
 
-				if (animationState.CurrentTime >= currentAnimation.duration || animationState.IsInterruptible) 
+				if (animationState.IsInterruptible) 
 				{
 					animationState.CurrentTime = 0.0f;
 					animationState.InLoop = nextAnimation.loop;
 					animationState.IsInterruptible = nextAnimation.isInterruptible;
 					animationState.CurrentState = nextState;
+					currentAnimation.currentFrame = 0;
+				}
+				else
+				{
+					if (pressed) 
+					{
+						animationState.CurrentTime = 0.0f;
+						animationState.InLoop = nextAnimation.loop;
+						animationState.IsInterruptible = nextAnimation.isInterruptible;
+						animationState.CurrentState = nextState;
+						currentAnimation.currentFrame = 0;
+					}
+				}
+			}
+			else
+			{
+				if (animationState.IsInterruptible) 
+				{
+					
+					return;
 				}
 				else 
 				{
-					return;
+					if (pressed) 
+					{
+						
+						animationState.CurrentTime = 0.0f;
+						//currentAnimation.currentFrame = 0;
+					}
 				}
-
+				
 			}
+
 		}
 
 	}
