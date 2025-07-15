@@ -42,17 +42,17 @@ void AnimationPlaybackSystem::Update(float deltaTime)
 			}
 		}
 
-		animationState.CurrentFrame = (int)std::floor(animationState.CurrentTime / currentAnimation.frameRate);
+		animationState.CurrentFrame = static_cast<int>(std::floor(animationState.CurrentTime / currentAnimation.frameRate));
 
 		if (!currentAnimation.loop && animationState.CurrentTime >= animationDuration)
 		{
 			if (currentAnimation.hasToLock)
 			{
-				animationState.CurrentFrame = (int)currentAnimation.frames.size() - 1;
+				animationState.CurrentFrame = static_cast<int>(currentAnimation.frames.size() - 1);
 			}
 			else
 			{
-				animationState.CurrentFrame = std::min(animationState.CurrentFrame, (int)currentAnimation.frames.size() - 1);
+				animationState.CurrentFrame = std::min(animationState.CurrentFrame, static_cast<int>(currentAnimation.frames.size() - 1));
 			}
 		}
 		else

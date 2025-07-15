@@ -41,7 +41,7 @@ void App::Run()
     int ENTTQUANTITY = 1;
     std::cout << "\nPuedes hacer click para crear una entidad\n";
     std::cout << "Selecciona la cantidad de Entidades que deseas renderizar (cap 99999): ";
-    //std::cin >> ENTTQUANTITY;
+    std::cin >> ENTTQUANTITY;
 
     for (int i = 0; i < ENTTQUANTITY; ++i)
     {
@@ -127,7 +127,7 @@ void App::RegisterSystems()
     {
         Signature transformSignature;
         transformSignature.set(gCoordinator.GetComponentType<Transform>());
-        gCoordinator.SetSystemSignature<TransformSystem>(transformSignature);
+        gCoordinator.SetSystemSignature<TransformSystem>(transformSignature);   
     }
 
     animationTransitionSystem = gCoordinator.RegisterSystem<AnimationTransitionSystem>();
@@ -172,7 +172,7 @@ void App::CreateEntity(std::unordered_map<states, Animation> animations)
     Entity entity = gCoordinator.CreateEntity();
     gCoordinator.AddComponent<Transform>(entity,
 
-        { .position = Vec2{static_cast<float>(generic_tools::random_number(0,1400)), static_cast<float>(generic_tools::random_number(0, 800)) }, .scale = Vec2{1.0f,1.0f} });
+        { .position = Vec2{static_cast<float>(generic_tools::random_number(0,1400)), static_cast<float>(generic_tools::random_number(0, 800)) }, .scale = Vec2{2.0f,2.0f} });
     gCoordinator.AddComponent<AnimationRequest>(entity,
         {
             .AnimationQueue = std::queue<states>(),

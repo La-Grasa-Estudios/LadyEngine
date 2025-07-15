@@ -3707,10 +3707,10 @@ void ImGui::RenderTextEllipsis(ImDrawList* draw_list, const ImVec2& pos_min, con
         const float font_size = draw_list->_Data->FontSize;
         const float font_scale = draw_list->_Data->FontScale;
         const char* text_end_ellipsis = NULL;
-        const float ellipsis_width = font->EllipsisWidth * font_scale;
+        const float ellipsip_Width = font->EllipsisWidth * font_scale;
 
         // We can now claim the space between pos_max.x and ellipsis_max.x
-        const float text_avail_width = ImMax((ImMax(pos_max.x, ellipsis_max_x) - ellipsis_width) - pos_min.x, 1.0f);
+        const float text_avail_width = ImMax((ImMax(pos_max.x, ellipsis_max_x) - ellipsip_Width) - pos_min.x, 1.0f);
         float text_size_clipped_x = font->CalcTextSizeA(font_size, text_avail_width, 0.0f, text, text_end_full, &text_end_ellipsis).x;
         if (text == text_end_ellipsis && text_end_ellipsis < text_end_full)
         {
@@ -3728,7 +3728,7 @@ void ImGui::RenderTextEllipsis(ImDrawList* draw_list, const ImVec2& pos_min, con
         // Render text, render ellipsis
         RenderTextClippedEx(draw_list, pos_min, ImVec2(clip_max_x, pos_max.y), text, text_end_ellipsis, &text_size, ImVec2(0.0f, 0.0f));
         ImVec2 ellipsis_pos = ImTrunc(ImVec2(pos_min.x + text_size_clipped_x, pos_min.y));
-        if (ellipsis_pos.x + ellipsis_width <= ellipsis_max_x)
+        if (ellipsis_pos.x + ellipsip_Width <= ellipsis_max_x)
             for (int i = 0; i < font->EllipsisCharCount; i++, ellipsis_pos.x += font->EllipsisCharStep * font_scale)
                 font->RenderChar(draw_list, font_size, ellipsis_pos, GetColorU32(ImGuiCol_Text), font->EllipsisChar);
     }
@@ -17004,9 +17004,9 @@ void ImGui::ShowIDStackToolWindow(bool* p_open)
     if (tool->Results.Size > 0 && BeginTable("##table", 3, ImGuiTableFlags_Borders))
     {
         const float id_width = CalcTextSize("0xDDDDDDDD").x;
-        TableSetupColumn("Seed", ImGuiTableColumnFlags_WidthFixed, id_width);
-        TableSetupColumn("PushID", ImGuiTableColumnFlags_WidthStretch);
-        TableSetupColumn("Result", ImGuiTableColumnFlags_WidthFixed, id_width);
+        TableSetupColumn("Seed", ImGuiTableColumnFlagp_WidthFixed, id_width);
+        TableSetupColumn("PushID", ImGuiTableColumnFlagp_WidthStretch);
+        TableSetupColumn("Result", ImGuiTableColumnFlagp_WidthFixed, id_width);
         TableHeadersRow();
         for (int n = 0; n < tool->Results.Size; n++)
         {

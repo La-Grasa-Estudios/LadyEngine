@@ -28,7 +28,7 @@ void RenderSystem::Update(SDL_Renderer* renderer)
 		dstRect.h = static_cast<int>(transform.scale.y * renderable.srcRect.h);
 
 		SDL_Texture* texture = ResourceManager::get_resource_manager().get_texture(renderer, renderable.texture_path);
-		
+
 		SDL_SetTextureColorMod(texture, renderable.color_mod.r, renderable.color_mod.g, renderable.color_mod.b);
 
 		SDL_RenderCopyEx(renderer, texture, &renderable.srcRect, &dstRect, renderable.angle, &renderable.origin, renderable.flip);

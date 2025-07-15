@@ -787,7 +787,7 @@ void ImDrawList::AddPolyline(const ImVec2* points, const int points_count, ImU32
         // Do we want to draw this line using a texture?
         // - For now, only draw integer-width lines using textures to avoid issues with the way scaling occurs, could be improved.
         // - If AA_SIZE is not 1.0f we cannot use the texture path.
-        const bool use_texture = (Flags & ImDrawListFlags_AntiAliasedLinesUseTex) && (integer_thickness < IM_DRAWLIST_TEX_LINES_WIDTH_MAX) && (fractional_thickness <= 0.00001f) && (AA_SIZE == 1.0f);
+        const bool use_texture = (Flags & ImDrawListFlags_AntiAliasedLinesUseTex) && (integer_thickness < IM_DRAWLIST_TEX_LINEp_Width_MAX) && (fractional_thickness <= 0.00001f) && (AA_SIZE == 1.0f);
 
         // We should never hit this, because NewFrame() doesn't set ImDrawListFlags_AntiAliasedLinesUseTex unless ImFontAtlasFlags_NoBakedLines is off
         IM_ASSERT_PARANOID(!use_texture || !(_Data->Font->ContainerAtlas->Flags & ImFontAtlasFlags_NoBakedLines));
@@ -3275,7 +3275,7 @@ static void ImFontAtlasBuildRenderLinesTexData(ImFontAtlas* atlas)
     // This generates a triangular shape in the texture, with the various line widths stacked on top of each other to allow interpolation between them
     ImFontAtlasCustomRect* r = atlas->GetCustomRectByIndex(atlas->PackIdLines);
     IM_ASSERT(r->IsPacked());
-    for (int n = 0; n < IM_DRAWLIST_TEX_LINES_WIDTH_MAX + 1; n++) // +1 because of the zero-width row
+    for (int n = 0; n < IM_DRAWLIST_TEX_LINEp_Width_MAX + 1; n++) // +1 because of the zero-width row
     {
         // Each line consists of at least two empty pixels at the ends, with a line of solid pixels in the middle
         int y = n;
@@ -3335,7 +3335,7 @@ void ImFontAtlasBuildInit(ImFontAtlas* atlas)
     if (atlas->PackIdLines < 0)
     {
         if (!(atlas->Flags & ImFontAtlasFlags_NoBakedLines))
-            atlas->PackIdLines = atlas->AddCustomRectRegular(IM_DRAWLIST_TEX_LINES_WIDTH_MAX + 2, IM_DRAWLIST_TEX_LINES_WIDTH_MAX + 1);
+            atlas->PackIdLines = atlas->AddCustomRectRegular(IM_DRAWLIST_TEX_LINEp_Width_MAX + 2, IM_DRAWLIST_TEX_LINEp_Width_MAX + 1);
     }
 }
 

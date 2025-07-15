@@ -1280,8 +1280,8 @@ static void DemoWindowWidgetsComboBoxes()
         if (ImGui::CheckboxFlags("ImGuiComboFlags_NoArrowButton", &flags, ImGuiComboFlags_NoArrowButton))
             flags &= ~ImGuiComboFlags_NoPreview;     // Clear incompatible flags
         if (ImGui::CheckboxFlags("ImGuiComboFlags_NoPreview", &flags, ImGuiComboFlags_NoPreview))
-            flags &= ~(ImGuiComboFlags_NoArrowButton | ImGuiComboFlags_WidthFitPreview); // Clear incompatible flags
-        if (ImGui::CheckboxFlags("ImGuiComboFlags_WidthFitPreview", &flags, ImGuiComboFlags_WidthFitPreview))
+            flags &= ~(ImGuiComboFlags_NoArrowButton | ImGuiComboFlagp_WidthFitPreview); // Clear incompatible flags
+        if (ImGui::CheckboxFlags("ImGuiComboFlagp_WidthFitPreview", &flags, ImGuiComboFlagp_WidthFitPreview))
             flags &= ~ImGuiComboFlags_NoPreview;
 
         // Override default popup height
@@ -2502,9 +2502,9 @@ struct ExampleDualListBox
         //ImGui::Checkbox("Sorted", &OptKeepSorted);
         if (ImGui::BeginTable("split", 3, ImGuiTableFlags_None))
         {
-            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);    // Left side
-            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed);      // Buttons
-            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch);    // Right side
+            ImGui::TableSetupColumn("", ImGuiTableColumnFlagp_WidthStretch);    // Left side
+            ImGui::TableSetupColumn("", ImGuiTableColumnFlagp_WidthFixed);      // Buttons
+            ImGui::TableSetupColumn("", ImGuiTableColumnFlagp_WidthStretch);    // Right side
             ImGui::TableNextRow();
 
             int request_move_selected = -1;
@@ -3189,8 +3189,8 @@ static void DemoWindowWidgetsSelectionAndMultiSelect(ImGuiDemoWindowData* demo_d
                     if (widget_type == WidgetType_TreeNode)
                         ImGui::PushStyleVar(ImGuiStyleVar_CellPadding, ImVec2(0.0f, 0.0f));
                     ImGui::BeginTable("##Split", 2, ImGuiTableFlags_Resizable | ImGuiTableFlags_NoSavedSettings | ImGuiTableFlags_NoPadOuterX);
-                    ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 0.70f);
-                    ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 0.30f);
+                    ImGui::TableSetupColumn("", ImGuiTableColumnFlagp_WidthStretch, 0.70f);
+                    ImGui::TableSetupColumn("", ImGuiTableColumnFlagp_WidthStretch, 0.30f);
                     //ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacingY, 0.0f);
                 }
 
@@ -5468,10 +5468,10 @@ static void EditTableColumnsFlags(ImGuiTableColumnFlags* p_flags)
     ImGui::CheckboxFlags("_Disabled", p_flags, ImGuiTableColumnFlags_Disabled); ImGui::SameLine(); HelpMarker("Master disable flag (also hide from context menu)");
     ImGui::CheckboxFlags("_DefaultHide", p_flags, ImGuiTableColumnFlags_DefaultHide);
     ImGui::CheckboxFlags("_DefaultSort", p_flags, ImGuiTableColumnFlags_DefaultSort);
-    if (ImGui::CheckboxFlags("_WidthStretch", p_flags, ImGuiTableColumnFlags_WidthStretch))
-        *p_flags &= ~(ImGuiTableColumnFlags_WidthMask_ ^ ImGuiTableColumnFlags_WidthStretch);
-    if (ImGui::CheckboxFlags("_WidthFixed", p_flags, ImGuiTableColumnFlags_WidthFixed))
-        *p_flags &= ~(ImGuiTableColumnFlags_WidthMask_ ^ ImGuiTableColumnFlags_WidthFixed);
+    if (ImGui::CheckboxFlags("_WidthStretch", p_flags, ImGuiTableColumnFlagp_WidthStretch))
+        *p_flags &= ~(ImGuiTableColumnFlagp_WidthMask_ ^ ImGuiTableColumnFlagp_WidthStretch);
+    if (ImGui::CheckboxFlags("_WidthFixed", p_flags, ImGuiTableColumnFlagp_WidthFixed))
+        *p_flags &= ~(ImGuiTableColumnFlagp_WidthMask_ ^ ImGuiTableColumnFlagp_WidthFixed);
     ImGui::CheckboxFlags("_NoResize", p_flags, ImGuiTableColumnFlags_NoResize);
     ImGui::CheckboxFlags("_NoReorder", p_flags, ImGuiTableColumnFlags_NoReorder);
     ImGui::CheckboxFlags("_NoHide", p_flags, ImGuiTableColumnFlags_NoHide);
@@ -5753,9 +5753,9 @@ static void DemoWindowTables()
 
         if (ImGui::BeginTable("table1", 3, flags))
         {
-            ImGui::TableSetupColumn("AAA", ImGuiTableColumnFlags_WidthFixed);
-            ImGui::TableSetupColumn("BBB", ImGuiTableColumnFlags_WidthFixed);
-            ImGui::TableSetupColumn("CCC", ImGuiTableColumnFlags_WidthStretch);
+            ImGui::TableSetupColumn("AAA", ImGuiTableColumnFlagp_WidthFixed);
+            ImGui::TableSetupColumn("BBB", ImGuiTableColumnFlagp_WidthFixed);
+            ImGui::TableSetupColumn("CCC", ImGuiTableColumnFlagp_WidthStretch);
             ImGui::TableHeadersRow();
             for (int row = 0; row < 5; row++)
             {
@@ -5770,12 +5770,12 @@ static void DemoWindowTables()
         }
         if (ImGui::BeginTable("table2", 6, flags))
         {
-            ImGui::TableSetupColumn("AAA", ImGuiTableColumnFlags_WidthFixed);
-            ImGui::TableSetupColumn("BBB", ImGuiTableColumnFlags_WidthFixed);
-            ImGui::TableSetupColumn("CCC", ImGuiTableColumnFlags_WidthFixed | ImGuiTableColumnFlags_DefaultHide);
-            ImGui::TableSetupColumn("DDD", ImGuiTableColumnFlags_WidthStretch);
-            ImGui::TableSetupColumn("EEE", ImGuiTableColumnFlags_WidthStretch);
-            ImGui::TableSetupColumn("FFF", ImGuiTableColumnFlags_WidthStretch | ImGuiTableColumnFlags_DefaultHide);
+            ImGui::TableSetupColumn("AAA", ImGuiTableColumnFlagp_WidthFixed);
+            ImGui::TableSetupColumn("BBB", ImGuiTableColumnFlagp_WidthFixed);
+            ImGui::TableSetupColumn("CCC", ImGuiTableColumnFlagp_WidthFixed | ImGuiTableColumnFlags_DefaultHide);
+            ImGui::TableSetupColumn("DDD", ImGuiTableColumnFlagp_WidthStretch);
+            ImGui::TableSetupColumn("EEE", ImGuiTableColumnFlagp_WidthStretch);
+            ImGui::TableSetupColumn("FFF", ImGuiTableColumnFlagp_WidthStretch | ImGuiTableColumnFlags_DefaultHide);
             ImGui::TableHeadersRow();
             for (int row = 0; row < 5; row++)
             {
@@ -6295,10 +6295,10 @@ static void DemoWindowTables()
         PopStyleCompact();
         if (ImGui::BeginTable("table1", 3, flags1))
         {
-            // We could also set ImGuiTableFlags_SizingFixedFit on the table and all columns will default to ImGuiTableColumnFlags_WidthFixed.
-            ImGui::TableSetupColumn("one", ImGuiTableColumnFlags_WidthFixed, 100.0f); // Default to 100.0f
-            ImGui::TableSetupColumn("two", ImGuiTableColumnFlags_WidthFixed, 200.0f); // Default to 200.0f
-            ImGui::TableSetupColumn("three", ImGuiTableColumnFlags_WidthFixed);       // Default to auto
+            // We could also set ImGuiTableFlags_SizingFixedFit on the table and all columns will default to ImGuiTableColumnFlagp_WidthFixed.
+            ImGui::TableSetupColumn("one", ImGuiTableColumnFlagp_WidthFixed, 100.0f); // Default to 100.0f
+            ImGui::TableSetupColumn("two", ImGuiTableColumnFlagp_WidthFixed, 200.0f); // Default to 200.0f
+            ImGui::TableSetupColumn("three", ImGuiTableColumnFlagp_WidthFixed);       // Default to auto
             ImGui::TableHeadersRow();
             for (int row = 0; row < 4; row++)
             {
@@ -6328,11 +6328,11 @@ static void DemoWindowTables()
         if (ImGui::BeginTable("table2", 4, flags2))
         {
             // We could also set ImGuiTableFlags_SizingFixedFit on the table and then all columns
-            // will default to ImGuiTableColumnFlags_WidthFixed.
-            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, 100.0f);
-            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, TEXT_BASE_WIDTH * 15.0f);
-            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, TEXT_BASE_WIDTH * 30.0f);
-            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed, TEXT_BASE_WIDTH * 15.0f);
+            // will default to ImGuiTableColumnFlagp_WidthFixed.
+            ImGui::TableSetupColumn("", ImGuiTableColumnFlagp_WidthFixed, 100.0f);
+            ImGui::TableSetupColumn("", ImGuiTableColumnFlagp_WidthFixed, TEXT_BASE_WIDTH * 15.0f);
+            ImGui::TableSetupColumn("", ImGuiTableColumnFlagp_WidthFixed, TEXT_BASE_WIDTH * 30.0f);
+            ImGui::TableSetupColumn("", ImGuiTableColumnFlagp_WidthFixed, TEXT_BASE_WIDTH * 15.0f);
             for (int row = 0; row < 5; row++)
             {
                 ImGui::TableNextRow();
@@ -6604,8 +6604,8 @@ static void DemoWindowTables()
         {
             // The first column will use the default _WidthStretch when ScrollX is Off and _WidthFixed when ScrollX is On
             ImGui::TableSetupColumn("Name", ImGuiTableColumnFlags_NoHide);
-            ImGui::TableSetupColumn("Size", ImGuiTableColumnFlags_WidthFixed, TEXT_BASE_WIDTH * 12.0f);
-            ImGui::TableSetupColumn("Type", ImGuiTableColumnFlags_WidthFixed, TEXT_BASE_WIDTH * 18.0f);
+            ImGui::TableSetupColumn("Size", ImGuiTableColumnFlagp_WidthFixed, TEXT_BASE_WIDTH * 12.0f);
+            ImGui::TableSetupColumn("Type", ImGuiTableColumnFlagp_WidthFixed, TEXT_BASE_WIDTH * 18.0f);
             ImGui::TableHeadersRow();
 
             // Simple storage to output a dummy file-system.
@@ -6783,7 +6783,7 @@ static void DemoWindowTables()
         const int rows_count = 12;
 
         static ImGuiTableFlags table_flags = ImGuiTableFlags_SizingFixedFit | ImGuiTableFlags_ScrollX | ImGuiTableFlags_ScrollY | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersInnerH | ImGuiTableFlags_Hideable | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_HighlightHoveredColumn;
-        static ImGuiTableColumnFlags column_flags = ImGuiTableColumnFlags_AngledHeader | ImGuiTableColumnFlags_WidthFixed;
+        static ImGuiTableColumnFlags column_flags = ImGuiTableColumnFlags_AngledHeader | ImGuiTableColumnFlagp_WidthFixed;
         static bool bools[columns_count * rows_count] = {}; // Dummy storage selection storage
         static int frozen_cols = 1;
         static int frozen_rows = 2;
@@ -7037,10 +7037,10 @@ static void DemoWindowTables()
             // - ImGuiTableColumnFlags_DefaultSort
             // - ImGuiTableColumnFlags_NoSort / ImGuiTableColumnFlags_NoSortAscending / ImGuiTableColumnFlags_NoSortDescending
             // - ImGuiTableColumnFlags_PreferSortAscending / ImGuiTableColumnFlags_PreferSortDescending
-            ImGui::TableSetupColumn("ID",       ImGuiTableColumnFlags_DefaultSort          | ImGuiTableColumnFlags_WidthFixed,   0.0f, MyItemColumnID_ID);
-            ImGui::TableSetupColumn("Name",                                                  ImGuiTableColumnFlags_WidthFixed,   0.0f, MyItemColumnID_Name);
-            ImGui::TableSetupColumn("Action",   ImGuiTableColumnFlags_NoSort               | ImGuiTableColumnFlags_WidthFixed,   0.0f, MyItemColumnID_Action);
-            ImGui::TableSetupColumn("Quantity", ImGuiTableColumnFlags_PreferSortDescending | ImGuiTableColumnFlags_WidthStretch, 0.0f, MyItemColumnID_Quantity);
+            ImGui::TableSetupColumn("ID",       ImGuiTableColumnFlags_DefaultSort          | ImGuiTableColumnFlagp_WidthFixed,   0.0f, MyItemColumnID_ID);
+            ImGui::TableSetupColumn("Name",                                                  ImGuiTableColumnFlagp_WidthFixed,   0.0f, MyItemColumnID_Name);
+            ImGui::TableSetupColumn("Action",   ImGuiTableColumnFlags_NoSort               | ImGuiTableColumnFlagp_WidthFixed,   0.0f, MyItemColumnID_Action);
+            ImGui::TableSetupColumn("Quantity", ImGuiTableColumnFlags_PreferSortDescending | ImGuiTableColumnFlagp_WidthStretch, 0.0f, MyItemColumnID_Quantity);
             ImGui::TableSetupScrollFreeze(0, 1); // Make row always visible
             ImGui::TableHeadersRow();
 
@@ -7257,11 +7257,11 @@ static void DemoWindowTables()
             // Declare columns
             // We use the "user_id" parameter of TableSetupColumn() to specify a user id that will be stored in the sort specifications.
             // This is so our sort function can identify a column given our own identifier. We could also identify them based on their index!
-            ImGui::TableSetupColumn("ID",           columns_base_flags | ImGuiTableColumnFlags_DefaultSort | ImGuiTableColumnFlags_WidthFixed | ImGuiTableColumnFlags_NoHide, 0.0f, MyItemColumnID_ID);
-            ImGui::TableSetupColumn("Name",         columns_base_flags | ImGuiTableColumnFlags_WidthFixed, 0.0f, MyItemColumnID_Name);
-            ImGui::TableSetupColumn("Action",       columns_base_flags | ImGuiTableColumnFlags_NoSort | ImGuiTableColumnFlags_WidthFixed, 0.0f, MyItemColumnID_Action);
+            ImGui::TableSetupColumn("ID",           columns_base_flags | ImGuiTableColumnFlags_DefaultSort | ImGuiTableColumnFlagp_WidthFixed | ImGuiTableColumnFlags_NoHide, 0.0f, MyItemColumnID_ID);
+            ImGui::TableSetupColumn("Name",         columns_base_flags | ImGuiTableColumnFlagp_WidthFixed, 0.0f, MyItemColumnID_Name);
+            ImGui::TableSetupColumn("Action",       columns_base_flags | ImGuiTableColumnFlags_NoSort | ImGuiTableColumnFlagp_WidthFixed, 0.0f, MyItemColumnID_Action);
             ImGui::TableSetupColumn("Quantity",     columns_base_flags | ImGuiTableColumnFlags_PreferSortDescending, 0.0f, MyItemColumnID_Quantity);
-            ImGui::TableSetupColumn("Description",  columns_base_flags | ((flags & ImGuiTableFlags_NoHostExtendX) ? 0 : ImGuiTableColumnFlags_WidthStretch), 0.0f, MyItemColumnID_Description);
+            ImGui::TableSetupColumn("Description",  columns_base_flags | ((flags & ImGuiTableFlags_NoHostExtendX) ? 0 : ImGuiTableColumnFlagp_WidthStretch), 0.0f, MyItemColumnID_Description);
             ImGui::TableSetupColumn("Hidden",       columns_base_flags |  ImGuiTableColumnFlags_DefaultHide | ImGuiTableColumnFlags_NoSort);
             ImGui::TableSetupScrollFreeze(freeze_cols, freeze_rows);
 
@@ -8397,18 +8397,18 @@ void ImGui::ShowStyleEditor(ImGuiStyle* ref)
                     // N is not always exact here due to how PathArcTo() function work internally
                     ImGui::Text("R: %.f\nN: %d", rad, draw_list->_CalcCircleAutoSegmentCount(rad));
 
-                    const float canvas_width = IM_MAX(min_widget_width, rad * 2.0f);
-                    const float offset_x     = floorf(canvas_width * 0.5f);
+                    const float canvap_Width = IM_MAX(min_widget_width, rad * 2.0f);
+                    const float offset_x     = floorf(canvap_Width * 0.5f);
                     const float offset_y     = floorf(RAD_MAX);
 
                     const ImVec2 p1 = ImGui::GetCursorScreenPos();
                     draw_list->AddCircle(ImVec2(p1.x + offset_x, p1.y + offset_y), rad, ImGui::GetColorU32(ImGuiCol_Text));
-                    ImGui::Dummy(ImVec2(canvas_width, RAD_MAX * 2));
+                    ImGui::Dummy(ImVec2(canvap_Width, RAD_MAX * 2));
 
                     /*
                     const ImVec2 p2 = ImGui::GetCursorScreenPos();
                     draw_list->AddCircleFilled(ImVec2(p2.x + offset_x, p2.y + offset_y), rad, ImGui::GetColorU32(ImGuiCol_Text));
-                    ImGui::Dummy(ImVec2(canvas_width, RAD_MAX * 2));
+                    ImGui::Dummy(ImVec2(canvap_Width, RAD_MAX * 2));
                     */
 
                     ImGui::EndGroup();
@@ -9225,8 +9225,8 @@ struct ExampleAppPropertyEditor
             {
                 // Push object ID after we entered the table, so table is shared for all objects
                 ImGui::PushID((int)node->UID);
-                ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed);
-                ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 2.0f); // Default twice larger
+                ImGui::TableSetupColumn("", ImGuiTableColumnFlagp_WidthFixed);
+                ImGui::TableSetupColumn("", ImGuiTableColumnFlagp_WidthStretch, 2.0f); // Default twice larger
                 if (node->HasData)
                 {
                     // In a typical application, the structure description would be derived from a data-driven system.

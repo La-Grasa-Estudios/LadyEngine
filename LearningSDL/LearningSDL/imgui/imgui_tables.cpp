@@ -114,22 +114,22 @@ Index of this file:
 
 //-----------------------------------------------------------------------------
 // COLUMNS SIZING POLICIES
-// (Reference: ImGuiTableFlags_SizingXXX flags and ImGuiTableColumnFlags_WidthXXX flags)
+// (Reference: ImGuiTableFlags_SizingXXX flags and ImGuiTableColumnFlagp_WidthXXX flags)
 //-----------------------------------------------------------------------------
 // About overriding column sizing policy and width/weight with TableSetupColumn():
 // We use a default parameter of -1 for 'init_width'/'init_weight'.
-//   - with ImGuiTableColumnFlags_WidthFixed,    init_width  <= 0 (default)  --> width is automatic
-//   - with ImGuiTableColumnFlags_WidthFixed,    init_width  >  0 (explicit) --> width is custom
-//   - with ImGuiTableColumnFlags_WidthStretch,  init_weight <= 0 (default)  --> weight is 1.0f
-//   - with ImGuiTableColumnFlags_WidthStretch,  init_weight >  0 (explicit) --> weight is custom
+//   - with ImGuiTableColumnFlagp_WidthFixed,    init_width  <= 0 (default)  --> width is automatic
+//   - with ImGuiTableColumnFlagp_WidthFixed,    init_width  >  0 (explicit) --> width is custom
+//   - with ImGuiTableColumnFlagp_WidthStretch,  init_weight <= 0 (default)  --> weight is 1.0f
+//   - with ImGuiTableColumnFlagp_WidthStretch,  init_weight >  0 (explicit) --> weight is custom
 // Widths are specified _without_ CellPadding. If you specify a width of 100.0f, the column will be cover (100.0f + Padding * 2.0f)
 // and you can fit a 100.0f wide item in it without clipping and with padding honored.
 //-----------------------------------------------------------------------------
-// About default sizing policy (if you don't specify a ImGuiTableColumnFlags_WidthXXXX flag)
-//   - with Table policy ImGuiTableFlags_SizingFixedFit      --> default Column policy is ImGuiTableColumnFlags_WidthFixed, default Width is equal to contents width
-//   - with Table policy ImGuiTableFlags_SizingFixedSame     --> default Column policy is ImGuiTableColumnFlags_WidthFixed, default Width is max of all contents width
-//   - with Table policy ImGuiTableFlags_SizingStretchSame   --> default Column policy is ImGuiTableColumnFlags_WidthStretch, default Weight is 1.0f
-//   - with Table policy ImGuiTableFlags_SizingStretchWeight --> default Column policy is ImGuiTableColumnFlags_WidthStretch, default Weight is proportional to contents
+// About default sizing policy (if you don't specify a ImGuiTableColumnFlagp_WidthXXXX flag)
+//   - with Table policy ImGuiTableFlags_SizingFixedFit      --> default Column policy is ImGuiTableColumnFlagp_WidthFixed, default Width is equal to contents width
+//   - with Table policy ImGuiTableFlags_SizingFixedSame     --> default Column policy is ImGuiTableColumnFlagp_WidthFixed, default Width is max of all contents width
+//   - with Table policy ImGuiTableFlags_SizingStretchSame   --> default Column policy is ImGuiTableColumnFlagp_WidthStretch, default Weight is 1.0f
+//   - with Table policy ImGuiTableFlags_SizingStretchWeight --> default Column policy is ImGuiTableColumnFlagp_WidthStretch, default Weight is proportional to contents
 // Default Width and default Weight can be overridden when calling TableSetupColumn().
 //-----------------------------------------------------------------------------
 // About mixing Fixed/Auto and Stretch columns together:
@@ -745,17 +745,17 @@ static void TableSetupColumnFlags(ImGuiTable* table, ImGuiTableColumn* column, I
     ImGuiTableColumnFlags flags = flags_in;
 
     // Sizing Policy
-    if ((flags & ImGuiTableColumnFlags_WidthMask_) == 0)
+    if ((flags & ImGuiTableColumnFlagp_WidthMask_) == 0)
     {
         const ImGuiTableFlags table_sizing_policy = (table->Flags & ImGuiTableFlags_SizingMask_);
         if (table_sizing_policy == ImGuiTableFlags_SizingFixedFit || table_sizing_policy == ImGuiTableFlags_SizingFixedSame)
-            flags |= ImGuiTableColumnFlags_WidthFixed;
+            flags |= ImGuiTableColumnFlagp_WidthFixed;
         else
-            flags |= ImGuiTableColumnFlags_WidthStretch;
+            flags |= ImGuiTableColumnFlagp_WidthStretch;
     }
     else
     {
-        IM_ASSERT(ImIsPowerOfTwo(flags & ImGuiTableColumnFlags_WidthMask_)); // Check that only 1 of each set is used.
+        IM_ASSERT(ImIsPowerOfTwo(flags & ImGuiTableColumnFlagp_WidthMask_)); // Check that only 1 of each set is used.
     }
 
     // Resize
@@ -855,7 +855,7 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
             table->IsSortSpecsDirty = true;
 
         // Auto-fit unsized columns
-        const bool start_auto_fit = (column->Flags & ImGuiTableColumnFlags_WidthFixed) ? (column->WidthRequest < 0.0f) : (column->StretchWeight < 0.0f);
+        const bool start_auto_fit = (column->Flags & ImGuiTableColumnFlagp_WidthFixed) ? (column->WidthRequest < 0.0f) : (column->StretchWeight < 0.0f);
         if (start_auto_fit)
             column->AutoFitQueue = column->CannotSkipItemsQueue = (1 << 3) - 1; // Fit for three frames
 
@@ -887,12 +887,12 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
         const bool column_is_resizable = (column->Flags & ImGuiTableColumnFlags_NoResize) == 0;
         if (column_is_resizable)
             has_resizable = true;
-        if ((column->Flags & ImGuiTableColumnFlags_WidthFixed) && column->InitStretchWeightOrWidth > 0.0f && !column_is_resizable)
+        if ((column->Flags & ImGuiTableColumnFlagp_WidthFixed) && column->InitStretchWeightOrWidth > 0.0f && !column_is_resizable)
             column->WidthAuto = column->InitStretchWeightOrWidth;
 
         if (column->AutoFitQueue != 0x00)
             has_auto_fit_request = true;
-        if (column->Flags & ImGuiTableColumnFlags_WidthStretch)
+        if (column->Flags & ImGuiTableColumnFlagp_WidthStretch)
         {
             stretch_sum_width_auto += column->WidthAuto;
             count_stretch++;
@@ -927,7 +927,7 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
         ImGuiTableColumn* column = &table->Columns[column_n];
 
         const bool column_is_resizable = (column->Flags & ImGuiTableColumnFlags_NoResize) == 0;
-        if (column->Flags & ImGuiTableColumnFlags_WidthFixed)
+        if (column->Flags & ImGuiTableColumnFlagp_WidthFixed)
         {
             // Apply same widths policy
             float width_auto = column->WidthAuto;
@@ -938,7 +938,7 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
             // Latch initial size for fixed columns and update it constantly for auto-resizing column (unless clipped!)
             if (column->AutoFitQueue != 0x00)
                 column->WidthRequest = width_auto;
-            else if ((column->Flags & ImGuiTableColumnFlags_WidthFixed) && !column_is_resizable && column->IsRequestOutput)
+            else if ((column->Flags & ImGuiTableColumnFlagp_WidthFixed) && !column_is_resizable && column->IsRequestOutput)
                 column->WidthRequest = width_auto;
 
             // FIXME-TABLE: Increase minimum size during init frame to avoid biasing auto-fitting widgets
@@ -991,7 +991,7 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
         ImGuiTableColumn* column = &table->Columns[column_n];
 
         // Allocate width for stretched/weighted columns (StretchWeight gets converted into WidthRequest)
-        if (column->Flags & ImGuiTableColumnFlags_WidthStretch)
+        if (column->Flags & ImGuiTableColumnFlagp_WidthStretch)
         {
             float weight_ratio = column->StretchWeight / stretch_sum_weights;
             column->WidthRequest = IM_TRUNC(ImMax(width_avail_for_stretched_columns * weight_ratio, table->MinColumnWidth) + 0.01f);
@@ -1016,7 +1016,7 @@ void ImGui::TableUpdateLayout(ImGuiTable* table)
             if (!IM_BITARRAY_TESTBIT(table->EnabledMaskByDisplayOrder, order_n))
                 continue;
             ImGuiTableColumn* column = &table->Columns[table->DisplayOrderToIndex[order_n]];
-            if (!(column->Flags & ImGuiTableColumnFlags_WidthStretch))
+            if (!(column->Flags & ImGuiTableColumnFlagp_WidthStretch))
                 continue;
             column->WidthRequest += 1.0f;
             column->WidthGiven += 1.0f;
@@ -1441,12 +1441,12 @@ void    ImGui::EndTable()
         if (IM_BITARRAY_TESTBIT(table->EnabledMaskByIndex, column_n))
         {
             ImGuiTableColumn* column = &table->Columns[column_n];
-            float column_width_request = ((column->Flags & ImGuiTableColumnFlags_WidthFixed) && !(column->Flags & ImGuiTableColumnFlags_NoResize)) ? column->WidthRequest : TableGetColumnWidthAuto(table, column);
-            if (column->Flags & ImGuiTableColumnFlags_WidthFixed)
+            float column_width_request = ((column->Flags & ImGuiTableColumnFlagp_WidthFixed) && !(column->Flags & ImGuiTableColumnFlags_NoResize)) ? column->WidthRequest : TableGetColumnWidthAuto(table, column);
+            if (column->Flags & ImGuiTableColumnFlagp_WidthFixed)
                 auto_fit_width_for_fixed += column_width_request;
             else
                 auto_fit_width_for_stretched += column_width_request;
-            if ((column->Flags & ImGuiTableColumnFlags_WidthStretch) && (column->Flags & ImGuiTableColumnFlags_NoResize) != 0)
+            if ((column->Flags & ImGuiTableColumnFlagp_WidthStretch) && (column->Flags & ImGuiTableColumnFlags_NoResize) != 0)
                 auto_fit_width_for_stretched_min = ImMax(auto_fit_width_for_stretched_min, column_width_request / (column->StretchWeight / table->ColumnsStretchSumWeights));
         }
     const float width_spacings = (table->OuterPaddingX * 2.0f) + (table->CellSpacingX1 + table->CellSpacingX2) * (table->ColumnsEnabledCount - 1);
@@ -1575,8 +1575,8 @@ static void TableInitColumnDefaults(ImGuiTable* table, ImGuiTableColumn* column,
     if (init_mask & ImGuiTableFlags_Resizable)
     {
         float init_width_or_weight = column->InitStretchWeightOrWidth;
-        column->WidthRequest = ((flags & ImGuiTableColumnFlags_WidthFixed) && init_width_or_weight > 0.0f) ? init_width_or_weight : -1.0f;
-        column->StretchWeight = (init_width_or_weight > 0.0f && (flags & ImGuiTableColumnFlags_WidthStretch)) ? init_width_or_weight : -1.0f;
+        column->WidthRequest = ((flags & ImGuiTableColumnFlagp_WidthFixed) && init_width_or_weight > 0.0f) ? init_width_or_weight : -1.0f;
+        column->StretchWeight = (init_width_or_weight > 0.0f && (flags & ImGuiTableColumnFlagp_WidthStretch)) ? init_width_or_weight : -1.0f;
         if (init_width_or_weight > 0.0f) // Disable auto-fit if an explicit width/weight has been specified
             column->AutoFitQueue = 0x00;
     }
@@ -1616,14 +1616,14 @@ void ImGui::TableSetupColumn(const char* label, ImGuiTableColumnFlags flags, flo
 
     // Assert when passing a width or weight if policy is entirely left to default, to avoid storing width into weight and vice-versa.
     // Give a grace to users of ImGuiTableFlags_ScrollX.
-    if (table->IsDefaultSizingPolicy && (flags & ImGuiTableColumnFlags_WidthMask_) == 0 && (flags & ImGuiTableFlags_ScrollX) == 0)
+    if (table->IsDefaultSizingPolicy && (flags & ImGuiTableColumnFlagp_WidthMask_) == 0 && (flags & ImGuiTableFlags_ScrollX) == 0)
         IM_ASSERT(init_width_or_weight <= 0.0f && "Can only specify width/weight if sizing policy is set explicitly in either Table or Column.");
 
     // When passing a width automatically enforce WidthFixed policy
     // (whereas TableSetupColumnFlags would default to WidthAuto if table is not resizable)
-    if ((flags & ImGuiTableColumnFlags_WidthMask_) == 0 && init_width_or_weight > 0.0f)
+    if ((flags & ImGuiTableColumnFlagp_WidthMask_) == 0 && init_width_or_weight > 0.0f)
         if ((table->Flags & ImGuiTableFlags_SizingMask_) == ImGuiTableFlags_SizingFixedFit || (table->Flags & ImGuiTableFlags_SizingMask_) == ImGuiTableFlags_SizingFixedSame)
-            flags |= ImGuiTableColumnFlags_WidthFixed;
+            flags |= ImGuiTableColumnFlagp_WidthFixed;
     if (flags & ImGuiTableColumnFlags_AngledHeader)
     {
         flags |= ImGuiTableColumnFlags_NoHeaderLabel;
@@ -2292,7 +2292,7 @@ float ImGui::TableGetColumnWidthAuto(ImGuiTable* table, ImGuiTableColumn* column
         width_auto = ImMax(width_auto, content_width_headers);
 
     // Non-resizable fixed columns preserve their requested width
-    if ((column->Flags & ImGuiTableColumnFlags_WidthFixed) && column->InitStretchWeightOrWidth > 0.0f)
+    if ((column->Flags & ImGuiTableColumnFlagp_WidthFixed) && column->InitStretchWeightOrWidth > 0.0f)
         if (!(table->Flags & ImGuiTableFlags_Resizable) || (column->Flags & ImGuiTableColumnFlags_NoResize))
             width_auto = column->InitStretchWeightOrWidth;
 
@@ -2355,7 +2355,7 @@ void ImGui::TableSetColumnWidth(int column_n, float width)
 
     // If we have all Fixed columns OR resizing a Fixed column that doesn't come after a Stretch one, we can do an offsetting resize.
     // This is the preferred resize path
-    if (column_0->Flags & ImGuiTableColumnFlags_WidthFixed)
+    if (column_0->Flags & ImGuiTableColumnFlagp_WidthFixed)
         if (!column_1 || table->LeftMostStretchedColumn == -1 || table->Columns[table->LeftMostStretchedColumn].DisplayOrder >= column_0->DisplayOrder)
         {
             column_0->WidthRequest = column_0_width;
@@ -2376,7 +2376,7 @@ void ImGui::TableSetColumnWidth(int column_n, float width)
     IM_ASSERT(column_0_width > 0.0f && column_1_width > 0.0f);
     column_0->WidthRequest = column_0_width;
     column_1->WidthRequest = column_1_width;
-    if ((column_0->Flags | column_1->Flags) & ImGuiTableColumnFlags_WidthStretch)
+    if ((column_0->Flags | column_1->Flags) & ImGuiTableColumnFlagp_WidthStretch)
         TableUpdateColumnsWeightFromWidth(table);
     table->IsSettingsDirty = true;
 }
@@ -2398,7 +2398,7 @@ void ImGui::TableSetColumnWidthAutoAll(ImGuiTable* table)
     for (int column_n = 0; column_n < table->ColumnsCount; column_n++)
     {
         ImGuiTableColumn* column = &table->Columns[column_n];
-        if (!column->IsEnabled && !(column->Flags & ImGuiTableColumnFlags_WidthStretch)) // Cannot reset weight of hidden stretch column
+        if (!column->IsEnabled && !(column->Flags & ImGuiTableColumnFlagp_WidthStretch)) // Cannot reset weight of hidden stretch column
             continue;
         column->CannotSkipItemsQueue = (1 << 0);
         column->AutoFitQueue = (1 << 1);
@@ -2415,7 +2415,7 @@ void ImGui::TableUpdateColumnsWeightFromWidth(ImGuiTable* table)
     for (int column_n = 0; column_n < table->ColumnsCount; column_n++)
     {
         ImGuiTableColumn* column = &table->Columns[column_n];
-        if (!column->IsEnabled || !(column->Flags & ImGuiTableColumnFlags_WidthStretch))
+        if (!column->IsEnabled || !(column->Flags & ImGuiTableColumnFlagp_WidthStretch))
             continue;
         IM_ASSERT(column->StretchWeight > 0.0f);
         visible_weight += column->StretchWeight;
@@ -2427,7 +2427,7 @@ void ImGui::TableUpdateColumnsWeightFromWidth(ImGuiTable* table)
     for (int column_n = 0; column_n < table->ColumnsCount; column_n++)
     {
         ImGuiTableColumn* column = &table->Columns[column_n];
-        if (!column->IsEnabled || !(column->Flags & ImGuiTableColumnFlags_WidthStretch))
+        if (!column->IsEnabled || !(column->Flags & ImGuiTableColumnFlagp_WidthStretch))
             continue;
         column->StretchWeight = (column->WidthRequest / visible_width) * visible_weight;
         IM_ASSERT(column->StretchWeight > 0.0f);
@@ -3678,15 +3678,15 @@ void ImGui::TableSaveSettings(ImGuiTable* table)
     settings->SaveFlags = ImGuiTableFlags_None;
     for (int n = 0; n < table->ColumnsCount; n++, column++, column_settings++)
     {
-        const float width_or_weight = (column->Flags & ImGuiTableColumnFlags_WidthStretch) ? column->StretchWeight : column->WidthRequest;
+        const float width_or_weight = (column->Flags & ImGuiTableColumnFlagp_WidthStretch) ? column->StretchWeight : column->WidthRequest;
         column_settings->WidthOrWeight = width_or_weight;
         column_settings->Index = (ImGuiTableColumnIdx)n;
         column_settings->DisplayOrder = column->DisplayOrder;
         column_settings->SortOrder = column->SortOrder;
         column_settings->SortDirection = column->SortDirection;
         column_settings->IsEnabled = column->IsUserEnabled;
-        column_settings->IsStretch = (column->Flags & ImGuiTableColumnFlags_WidthStretch) ? 1 : 0;
-        if ((column->Flags & ImGuiTableColumnFlags_WidthStretch) == 0)
+        column_settings->IsStretch = (column->Flags & ImGuiTableColumnFlagp_WidthStretch) ? 1 : 0;
+        if ((column->Flags & ImGuiTableColumnFlagp_WidthStretch) == 0)
             save_ref_scale = true;
 
         // We skip saving some data in the .ini file when they are unnecessary to restore our state.
@@ -4012,7 +4012,7 @@ void ImGui::DebugNodeTable(ImGuiTable* table)
     //BulletText("BgDrawChannels: %d/%d", 0, table->BgDrawChannelUnfrozen);
     float sum_weights = 0.0f;
     for (int n = 0; n < table->ColumnsCount; n++)
-        if (table->Columns[n].Flags & ImGuiTableColumnFlags_WidthStretch)
+        if (table->Columns[n].Flags & ImGuiTableColumnFlagp_WidthStretch)
             sum_weights += table->Columns[n].StretchWeight;
     for (int n = 0; n < table->ColumnsCount; n++)
     {
@@ -4032,8 +4032,8 @@ void ImGui::DebugNodeTable(ImGuiTable* table)
             column->MinX, column->MaxX, column->MaxX - column->MinX, column->ClipRect.Min.x, column->ClipRect.Max.x, column->ClipRect.Max.x - column->ClipRect.Min.x,
             column->ContentMaxXFrozen - column->WorkMinX, column->ContentMaxXUnfrozen - column->WorkMinX, column->ContentMaxXHeadersUsed - column->WorkMinX, column->ContentMaxXHeadersIdeal - column->WorkMinX,
             column->SortOrder, (column->SortDirection == ImGuiSortDirection_Ascending) ? " (Asc)" : (column->SortDirection == ImGuiSortDirection_Descending) ? " (Des)" : "", column->UserID, column->Flags,
-            (column->Flags & ImGuiTableColumnFlags_WidthStretch) ? "WidthStretch " : "",
-            (column->Flags & ImGuiTableColumnFlags_WidthFixed) ? "WidthFixed " : "",
+            (column->Flags & ImGuiTableColumnFlagp_WidthStretch) ? "WidthStretch " : "",
+            (column->Flags & ImGuiTableColumnFlagp_WidthFixed) ? "WidthFixed " : "",
             (column->Flags & ImGuiTableColumnFlags_NoResize) ? "NoResize " : "");
         Bullet();
         Selectable(buf);
