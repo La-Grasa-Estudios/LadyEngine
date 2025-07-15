@@ -37,6 +37,7 @@ public:
 		}
 		return mComponentTypes[typeName];
 	}
+
 	template <typename T> 
 	void AddComponent(Entity entity, T component)
 	{

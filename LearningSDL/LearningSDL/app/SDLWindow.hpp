@@ -16,7 +16,7 @@ public:
 	void Update();
 	void Clear();
 	void Render();
-	bool inline ShouldClose() { return m_ShouldClose; };
+	inline bool ShouldClose() { return m_ShouldClose; };
 
 	SDL_Renderer* SetRenderer();
 	SDL_Window* SetWindow();
